@@ -1,4 +1,4 @@
-package http_gateway
+package http_server
 
 import (
 	"context"

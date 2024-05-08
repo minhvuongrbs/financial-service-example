@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"strings"
 
-	grpc_server "github.com/minhvuongrbs/financial-service-example/internal/ports/grpc"
-	http_gateway "github.com/minhvuongrbs/financial-service-example/internal/ports/http"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/grpc_server"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/http_server"
 	"github.com/minhvuongrbs/financial-service-example/pkg/database"
 	"github.com/minhvuongrbs/financial-service-example/pkg/logger"
 	pkgredis "github.com/minhvuongrbs/financial-service-example/pkg/redis"
@@ -15,12 +15,12 @@ import (
 )
 
 type Config struct {
-	Env             string              `json:"env" mapstructure:"env"`
-	GRPC            grpc_server.Config  `json:"grpc" mapstructure:"grpc"`
-	HTTP            http_gateway.Config `json:"http" mapstructure:"http"`
-	Database        database.Config     `json:"database" mapstructure:"database"`
-	Logger          logger.Config       `json:"logger" mapstructure:"logger"`
-	RedisConnection pkgredis.Config     `json:"redis_connection" mapstructure:"redis_connection"`
+	Env             string             `json:"env" mapstructure:"env"`
+	GRPC            grpc_server.Config `json:"grpc" mapstructure:"grpc"`
+	HTTP            http_server.Config `json:"http" mapstructure:"http"`
+	Database        database.Config    `json:"database" mapstructure:"database"`
+	Logger          logger.Config      `json:"logger" mapstructure:"logger"`
+	RedisConnection pkgredis.Config    `json:"redis_connection" mapstructure:"redis_connection"`
 }
 
 func loadDefaultConfig() *Config {
@@ -30,7 +30,7 @@ func loadDefaultConfig() *Config {
 			Host: "0.0.0.0",
 			Port: 9090,
 		},
-		HTTP: http_gateway.Config{
+		HTTP: http_server.Config{
 			Host: "0.0.0.0",
 			Port: 8080,
 		},

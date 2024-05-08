@@ -1,12 +1,12 @@
-package auth
+package grpc
 
 import (
 	"context"
 	"fmt"
 
 	"github.com/minhvuongrbs/financial-service-example/api/grpc/auth"
-	"github.com/minhvuongrbs/financial-service-example/internal/app/auth/login"
-	"github.com/minhvuongrbs/financial-service-example/internal/app/auth/register"
+	"github.com/minhvuongrbs/financial-service-example/internal/auth/app/login"
+	"github.com/minhvuongrbs/financial-service-example/internal/auth/app/register"
 	"google.golang.org/grpc"
 )
 

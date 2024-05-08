@@ -9,8 +9,8 @@ import (
 	"syscall"
 
 	"github.com/minhvuongrbs/financial-service-example/config"
-	grpc_server "github.com/minhvuongrbs/financial-service-example/internal/ports/grpc"
-	http_gateway "github.com/minhvuongrbs/financial-service-example/internal/ports/http"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/grpc_server"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/http_server"
 	"github.com/minhvuongrbs/financial-service-example/pkg/logger"
 	"github.com/urfave/cli/v2"
 )
@@ -72,14 +72,14 @@ func StartHTTPServer(cfg config.Config) error {
 	if err != nil {
 		return fmt.Errorf("failed to init infrastructure: %w", err)
 	}
-	//
-	//adapters, err := NewAdapters(cfg, infra)
-	//if err != nil {
-	//	return fmt.Errorf("failed to new adapters: %w", err)
-	//}
+
+	serviceAdapters, err := newAdapters(cfg, infra)
+	if err != nil {
+		return fmt.Errorf("failed to new serviceAdapters: %w", err)
+	}
 
 	// new application
-	grpcServices, err := NewGrpcServices(cfg, infra, nil)
+	grpcServices, err := NewGrpcServices(cfg, infra, serviceAdapters)
 	if err != nil {
 		return fmt.Errorf("failed to new grpc services: %w", err)
 	}
@@ -99,11 +99,11 @@ func StartHTTPServer(cfg config.Config) error {
 		return fmt.Errorf("failed to new http gateway services: %w", err)
 	}
 
-	httpServices := []http_gateway.HTTPService{
+	httpServices := []http_server.HTTPService{
 		//monitor.PprofService{},
 		//monitor.PrometheusService{},
 	}
-	httpStop, cherr := http_gateway.StartServer(cfg.HTTP, httpgwServices, httpServices)
+	httpStop, cherr := http_server.StartServer(cfg.HTTP, httpgwServices, httpServices)
 	go func() {
 		for herr := range cherr {
 			cerr <- fmt.Errorf("http server error: %w", herr)

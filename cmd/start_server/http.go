@@ -4,13 +4,13 @@ import (
 	"fmt"
 
 	"github.com/minhvuongrbs/financial-service-example/config"
-	http_gateway "github.com/minhvuongrbs/financial-service-example/internal/ports/http"
-	"github.com/minhvuongrbs/financial-service-example/internal/ports/http/auth"
+	"github.com/minhvuongrbs/financial-service-example/internal/auth/ports/http"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/http_server"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-func NewHTTPGatewayServices(cfg config.Config) ([]http_gateway.GrpcGatewayServices, error) {
+func NewHTTPGatewayServices(cfg config.Config) ([]http_server.GrpcGatewayServices, error) {
 	grpcServerAddr := fmt.Sprintf("%s:%d", cfg.GRPC.Host, cfg.GRPC.Port)
 	grpcServerConn, err := grpc.Dial(grpcServerAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -23,9 +23,9 @@ func NewHTTPGatewayServices(cfg config.Config) ([]http_gateway.GrpcGatewayServic
 	}
 
 	// new http gateway services
-	authHttpGwService := auth.NewAuthGatewayService(grpcServerConn)
+	authHttpGwService := http.NewAuthGatewayService(grpcServerConn)
 
-	return []http_gateway.GrpcGatewayServices{
+	return []http_server.GrpcGatewayServices{
 		authHttpGwService,
 	}, nil
 }

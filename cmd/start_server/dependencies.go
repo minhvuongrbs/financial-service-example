@@ -31,9 +31,9 @@ func initInfrastructure(cfg config.Config) (infrastructureDependencies, error) {
 	}, nil
 }
 
-type Adapters struct {
+type adapters struct {
 }
 
-func NewAdapters() (Adapters, error) {
-	return Adapters{}, nil
+func newAdapters(conf config.Config, infra infrastructureDependencies) (adapters, error) {
+	return adapters{}, nil
 }

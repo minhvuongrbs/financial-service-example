@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/minhvuongrbs/financial-service-example/config"
-	grpc_server "github.com/minhvuongrbs/financial-service-example/internal/ports/grpc"
-	"github.com/minhvuongrbs/financial-service-example/internal/ports/grpc/auth"
+	"github.com/minhvuongrbs/financial-service-example/internal/auth/ports/grpc"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/grpc_server"
 )
 
-func NewGrpcServices(cfg config.Config, infra infrastructureDependencies, adapters *Adapters) ([]grpc_server.Service, error) {
+func NewGrpcServices(cfg config.Config, infra infrastructureDependencies, adapters adapters) ([]grpc_server.Service, error) {
 	authService, err := NewAuthService(cfg, infra)
 	if err != nil {
 		return nil, fmt.Errorf("failed to new auth service: %w", err)
@@ -18,7 +18,7 @@ func NewGrpcServices(cfg config.Config, infra infrastructureDependencies, adapte
 	}, nil
 }
 
-func NewAuthService(_ config.Config, _ infrastructureDependencies) (auth.Service, error) {
+func NewAuthService(_ config.Config, _ infrastructureDependencies) (grpc.Service, error) {
 	//createUserHandler, err := create_user.NewCreateUser(adapters.UserMysqlRepository)
 	//if err != nil {
 	//	return nil, fmt.Errorf("failed to new create user application: %w", err)
@@ -33,6 +33,6 @@ func NewAuthService(_ config.Config, _ infrastructureDependencies) (auth.Service
 	//	CreateUserHandler: createUserHandler,
 	//	Login:             loginHandler,
 	//}
-	authService := auth.NewAuthService()
+	authService := grpc.NewAuthService()
 	return authService, nil
 }
