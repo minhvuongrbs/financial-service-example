@@ -28,7 +28,12 @@ docker-compose-up:
 	docker-compose up --build
 
 generate_sqlc:## generate database model
-	sqlc generate -f ./internal/adapters/repository/sqlc/sqlc.yaml
+	sqlc generate -f ./internal/auth/adapters/repository/sqlc/sqlc.yaml
 
 generate_proto:## generate proto
 	buf generate
+
+.PHONY: test/cover
+coverage:
+	go test -v -race -buildvcs -coverprofile=/tmp/coverage.out ./...
+	go tool cover -html=/tmp/coverage.out

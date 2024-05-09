@@ -11,7 +11,7 @@ import (
 	"github.com/minhvuongrbs/financial-service-example/config"
 	"github.com/minhvuongrbs/financial-service-example/internal/common/grpc_server"
 	"github.com/minhvuongrbs/financial-service-example/internal/common/http_server"
-	"github.com/minhvuongrbs/financial-service-example/pkg/logger"
+	"github.com/minhvuongrbs/financial-service-example/pkg/logging"
 	"github.com/urfave/cli/v2"
 )
 
@@ -51,11 +51,11 @@ func StartHTTPServer(cfg config.Config) error {
 		fmt.Println("Start server with config:", string(bs))
 	}
 
-	err := logger.InitLogger(&cfg.Logger)
+	err := logging.InitLogger(&cfg.Logger)
 	if err != nil {
 		return fmt.Errorf("failed to init logger: %w", err)
 	}
-	l := logger.FromContext(context.Background())
+	l := logging.FromContext(context.Background())
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 

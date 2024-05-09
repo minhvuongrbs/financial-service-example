@@ -29,3 +29,8 @@ redis_connection:
   addr: 0.0.0.0:6379
   db: 0
   pool_size: 10
+
+jwt_token:
+  private_key_path: ./config/cert/id_rsa_private_key.txt
+  public_key_path: ./config/cert/id_rsa.pub
+  token_duration: 1h

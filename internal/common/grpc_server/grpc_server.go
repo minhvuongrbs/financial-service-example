@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/minhvuongrbs/financial-service-example/pkg/grpc_interceptor"
 	_ "github.com/prometheus/client_golang/prometheus"
@@ -26,6 +27,7 @@ func StartServer(grpcCfg Config, services ...Service) (gracefulStop func(), cerr
 	grpcService := grpc.NewServer(
 		grpc.UnaryInterceptor(grpc_interceptor.ZapLoggerUnaryServerInterceptor(grpc_interceptor.DefaultShouldLog(map[string]struct{}{}))),
 		grpc.ChainUnaryInterceptor(
+			grpc_recovery.UnaryServerInterceptor(),
 			grpc_prometheus.UnaryServerInterceptor,
 			//authenticateInterceptor,
 		),
