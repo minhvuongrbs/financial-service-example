@@ -1,0 +1,75 @@
+@startuml Campaign handling
+autonumber
+
+actor User as user
+participant App as app
+participant OnboardingService as onboardingservice
+actor Admin as admin
+participant PromotionService as promotionservice
+control PromotionJob as promotionjob
+database Database as db
+database Redis as redis
+participant CashierService as cashierservice
+
+group Onboarding
+  user -> app: fullfill user info
+  activate user
+
+  app -> onboardingservice: call API <color green>create account</color>
+  activate onboardingservice
+  onboardingservice -> onboardingservice: validate unique information
+  onboardingservice -> db: persist account information
+  onboardingservice --> app: account created
+  user -> app: login
+  app -> onboardingservice: call API <color green>login</color>
+  alt unauthorized
+    onboardingservice --> app: unauthorized
+    else valid authentication
+    onboardingservice --> app: jwt token
+  end
+  deactivate onboardingservice
+end
+
+group Promotion
+  user -> app: access campaign
+  deactivate user
+  app -> promotionservice: call API <color green>participate campaign</color>
+  activate promotionservice
+  promotionservice -> redis: check campaign status
+  alt calling failed or campaign is inactive
+    promotionservice --> app: campaign not found
+  end
+  promotionservice -> db: persist account participate campaign
+
+  activate promotionjob
+  promotionjob -> db: polling to generate voucher each 5m
+  alt valid campaign and remaining voucher
+      promotionservice -> db: generate voucher for account
+  end
+  deactivate promotionjob
+end
+
+group Promotion Management
+  admin -> promotionservice: <color blue>get list campaigns</color>
+  admin -> promotionservice: <color green>update campaign status</color>
+  activate admin
+  promotionservice -> db: update campaign status
+  promotionservice -> redis: update campaign status
+  promotionservice --> admin: setting success
+  deactivate admin
+end
+
+
+group Purchasing
+  cashierservice -> promotionservice: call GRPC method get vouchers for user
+  activate cashierservice
+  cashierservice -> promotionservice: call GRPC method apply voucher
+  promotionservice -> promotionservice: apply and deactivate voucher
+  deactivate promotionservice
+
+  cashierservice -> cashierservice: acquire money
+  deactivate cashierservice
+end
+@enduml
+
+(*)cashier service is not include in this scope

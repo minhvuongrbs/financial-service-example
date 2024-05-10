@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package promotion.service;
+option go_package = "github.com/minhvuongrbs/financial-service-example";
+
+import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/rpc/error_details.proto";
+
+import "protoc-gen-swagger/options/annotations.proto";
+
+service Promotion {
+  rpc JoinCampaign (JoinCampaignRequest) returns (JoinCampaignReply){
+    option (google.api.http) = {
+      post: "/api/app/v1/promotion-service/join-campaign"
+      body: "*"
+    };
+  };
+}
+
+message JoinCampaignRequest {
+  int64 campaign_key = 1;
+}
+
+message JoinCampaignReply {
+  int32 code = 1;
+  string message = 2;
+}
