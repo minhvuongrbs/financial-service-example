@@ -122,7 +122,7 @@ func RegisterPromotionAdminHandlerServer(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/promotion.admin.PromotionAdmin/DefineVoucher", runtime.WithHTTPPathPattern("/api/app/v1/promotion-admin/voucher/define"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/promotion.admin.PromotionAdmin/DefineVoucher", runtime.WithHTTPPathPattern("/api/app/v1/promotion-admin/vouchers/define"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -208,7 +208,7 @@ func RegisterPromotionAdminHandlerClient(ctx context.Context, mux *runtime.Serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/promotion.admin.PromotionAdmin/DefineVoucher", runtime.WithHTTPPathPattern("/api/app/v1/promotion-admin/voucher/define"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/promotion.admin.PromotionAdmin/DefineVoucher", runtime.WithHTTPPathPattern("/api/app/v1/promotion-admin/vouchers/define"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -230,7 +230,7 @@ func RegisterPromotionAdminHandlerClient(ctx context.Context, mux *runtime.Serve
 var (
 	pattern_PromotionAdmin_DefineCampaign_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"api", "app", "v1", "promotion-admin", "campaigns", "define"}, ""))
 
-	pattern_PromotionAdmin_DefineVoucher_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"api", "app", "v1", "promotion-admin", "voucher", "define"}, ""))
+	pattern_PromotionAdmin_DefineVoucher_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"api", "app", "v1", "promotion-admin", "vouchers", "define"}, ""))
 )
 
 var (

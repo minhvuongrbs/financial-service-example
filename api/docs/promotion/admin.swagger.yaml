@@ -29,7 +29,7 @@ paths:
             $ref: '#/definitions/adminDefineCampaignRequest'
       tags:
         - PromotionAdmin
-  /api/app/v1/promotion-admin/voucher/define:
+  /api/app/v1/promotion-admin/vouchers/define:
     post:
       operationId: PromotionAdmin_DefineVoucher
       responses:
@@ -60,7 +60,33 @@ definitions:
         type: string
         format: date-time
       strategy:
-        $ref: '#/definitions/adminStrategy'
+        $ref: '#/definitions/adminCampaignStrategy'
+  adminCampaignStatus:
+    type: string
+    enum:
+      - CAMPAIGN_STATUS_ACTIVE
+      - CAMPAIGN_STATUS_INACTIVE
+    default: CAMPAIGN_STATUS_ACTIVE
+  adminCampaignStrategy:
+    type: object
+    properties:
+      strategyTopRegister:
+        $ref: '#/definitions/adminCampaignStrategyTopRegister'
+      strategySpending:
+        $ref: '#/definitions/adminCampaignStrategySpending'
+  adminCampaignStrategySpending:
+    type: object
+  adminCampaignStrategyTopRegister:
+    type: object
+    properties:
+      vouchers:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/adminVoucher'
+      topUsers:
+        type: string
+        format: int64
   adminDefineCampaignReply:
     type: object
     properties:
@@ -72,10 +98,10 @@ definitions:
   adminDefineCampaignRequest:
     type: object
     properties:
-      campaignKey:
-        type: string
       name:
         type: string
+      status:
+        $ref: '#/definitions/adminCampaignStatus'
       metadata:
         $ref: '#/definitions/adminCampaignMetadata'
   adminDefineVoucherReply:
@@ -89,37 +115,14 @@ definitions:
   adminDefineVoucherRequest:
     type: object
     properties:
-      voucherType:
+      name:
         type: string
-      amount:
+      isActive:
+        type: boolean
+      description:
         type: string
-        format: int64
-      expirationTime:
-        type: string
-        title: rfc3339 datetime
-      appId:
-        type: string
-        title: '* will be all app_id'
-  adminStrategy:
-    type: object
-    properties:
-      strategyTopRegister:
-        $ref: '#/definitions/adminStrategyTopRegister'
-      strategySpending:
-        $ref: '#/definitions/adminStrategySpending'
-  adminStrategySpending:
-    type: object
-  adminStrategyTopRegister:
-    type: object
-    properties:
-      vouchers:
-        type: array
-        items:
-          type: object
-          $ref: '#/definitions/adminVoucher'
-      topUsers:
-        type: string
-        format: int64
+      metadata:
+        $ref: '#/definitions/adminVoucherMetadata'
   adminVoucher:
     type: object
     properties:
@@ -129,6 +132,44 @@ definitions:
       totalVouchers:
         type: string
         format: int64
+  adminVoucherMetadata:
+    type: object
+    properties:
+      expirationTime:
+        type: string
+        format: date-time
+      strategy:
+        $ref: '#/definitions/adminVoucherStrategy'
+  adminVoucherStrategy:
+    type: object
+    properties:
+      fixedAmountForAppIds:
+        $ref: '#/definitions/adminVoucherStrategyFixedAmountForAppIds'
+      percentageDiscountForAppIds:
+        $ref: '#/definitions/adminVoucherStrategyPercentageDiscountForAppIds'
+  adminVoucherStrategyFixedAmountForAppIds:
+    type: object
+    properties:
+      amount:
+        type: string
+        format: int64
+      appId:
+        type: array
+        items:
+          type: string
+          format: int64
+  adminVoucherStrategyPercentageDiscountForAppIds:
+    type: object
+    properties:
+      percentage:
+        type: string
+        format: int64
+        title: 30% => 30
+      appId:
+        type: array
+        items:
+          type: string
+          format: int64
   protobufAny:
     type: object
     properties:

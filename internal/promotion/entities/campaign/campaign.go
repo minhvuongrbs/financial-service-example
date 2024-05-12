@@ -2,7 +2,6 @@ package campaign
 
 import (
 	"fmt"
-	"time"
 )
 
 type Status int
@@ -20,9 +19,6 @@ type Campaign struct {
 	Status Status
 
 	Metadata Metadata
-
-	CreatedAt time.Time
-	UpdatedAt time.Time
 }
 
 const (

@@ -57,13 +57,40 @@ func (m *DefineVoucherRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for VoucherType
+	// no validation rules for Name
 
-	// no validation rules for Amount
+	// no validation rules for IsActive
 
-	// no validation rules for ExpirationTime
+	// no validation rules for Description
 
-	// no validation rules for AppId
+	if all {
+		switch v := interface{}(m.GetMetadata()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, DefineVoucherRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, DefineVoucherRequestValidationError{
+					field:  "Metadata",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetMetadata()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return DefineVoucherRequestValidationError{
+				field:  "Metadata",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return DefineVoucherRequestMultiError(errors)
@@ -144,6 +171,566 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DefineVoucherRequestValidationError{}
+
+// Validate checks the field values on VoucherMetadata with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *VoucherMetadata) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on VoucherMetadata with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// VoucherMetadataMultiError, or nil if none found.
+func (m *VoucherMetadata) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *VoucherMetadata) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	if all {
+		switch v := interface{}(m.GetExpirationTime()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, VoucherMetadataValidationError{
+					field:  "ExpirationTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, VoucherMetadataValidationError{
+					field:  "ExpirationTime",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetExpirationTime()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VoucherMetadataValidationError{
+				field:  "ExpirationTime",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if all {
+		switch v := interface{}(m.GetStrategy()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, VoucherMetadataValidationError{
+					field:  "Strategy",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, VoucherMetadataValidationError{
+					field:  "Strategy",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetStrategy()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return VoucherMetadataValidationError{
+				field:  "Strategy",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	if len(errors) > 0 {
+		return VoucherMetadataMultiError(errors)
+	}
+
+	return nil
+}
+
+// VoucherMetadataMultiError is an error wrapping multiple validation errors
+// returned by VoucherMetadata.ValidateAll() if the designated constraints
+// aren't met.
+type VoucherMetadataMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m VoucherMetadataMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m VoucherMetadataMultiError) AllErrors() []error { return m }
+
+// VoucherMetadataValidationError is the validation error returned by
+// VoucherMetadata.Validate if the designated constraints aren't met.
+type VoucherMetadataValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VoucherMetadataValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VoucherMetadataValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VoucherMetadataValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VoucherMetadataValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VoucherMetadataValidationError) ErrorName() string { return "VoucherMetadataValidationError" }
+
+// Error satisfies the builtin error interface
+func (e VoucherMetadataValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVoucherMetadata.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VoucherMetadataValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VoucherMetadataValidationError{}
+
+// Validate checks the field values on VoucherStrategy with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *VoucherStrategy) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on VoucherStrategy with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// VoucherStrategyMultiError, or nil if none found.
+func (m *VoucherStrategy) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *VoucherStrategy) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	switch v := m.Metadata.(type) {
+	case *VoucherStrategy_FixedAmountForAppIds:
+		if v == nil {
+			err := VoucherStrategyValidationError{
+				field:  "Metadata",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetFixedAmountForAppIds()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, VoucherStrategyValidationError{
+						field:  "FixedAmountForAppIds",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, VoucherStrategyValidationError{
+						field:  "FixedAmountForAppIds",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetFixedAmountForAppIds()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return VoucherStrategyValidationError{
+					field:  "FixedAmountForAppIds",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *VoucherStrategy_PercentageDiscountForAppIds:
+		if v == nil {
+			err := VoucherStrategyValidationError{
+				field:  "Metadata",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetPercentageDiscountForAppIds()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, VoucherStrategyValidationError{
+						field:  "PercentageDiscountForAppIds",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, VoucherStrategyValidationError{
+						field:  "PercentageDiscountForAppIds",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetPercentageDiscountForAppIds()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return VoucherStrategyValidationError{
+					field:  "PercentageDiscountForAppIds",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	default:
+		_ = v // ensures v is used
+	}
+
+	if len(errors) > 0 {
+		return VoucherStrategyMultiError(errors)
+	}
+
+	return nil
+}
+
+// VoucherStrategyMultiError is an error wrapping multiple validation errors
+// returned by VoucherStrategy.ValidateAll() if the designated constraints
+// aren't met.
+type VoucherStrategyMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m VoucherStrategyMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m VoucherStrategyMultiError) AllErrors() []error { return m }
+
+// VoucherStrategyValidationError is the validation error returned by
+// VoucherStrategy.Validate if the designated constraints aren't met.
+type VoucherStrategyValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VoucherStrategyValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VoucherStrategyValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VoucherStrategyValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VoucherStrategyValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VoucherStrategyValidationError) ErrorName() string { return "VoucherStrategyValidationError" }
+
+// Error satisfies the builtin error interface
+func (e VoucherStrategyValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVoucherStrategy.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VoucherStrategyValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VoucherStrategyValidationError{}
+
+// Validate checks the field values on VoucherStrategyFixedAmountForAppIds with
+// the rules defined in the proto definition for this message. If any rules
+// are violated, the first error encountered is returned, or nil if there are
+// no violations.
+func (m *VoucherStrategyFixedAmountForAppIds) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on VoucherStrategyFixedAmountForAppIds
+// with the rules defined in the proto definition for this message. If any
+// rules are violated, the result is a list of violation errors wrapped in
+// VoucherStrategyFixedAmountForAppIdsMultiError, or nil if none found.
+func (m *VoucherStrategyFixedAmountForAppIds) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *VoucherStrategyFixedAmountForAppIds) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Percentage
+
+	if len(errors) > 0 {
+		return VoucherStrategyFixedAmountForAppIdsMultiError(errors)
+	}
+
+	return nil
+}
+
+// VoucherStrategyFixedAmountForAppIdsMultiError is an error wrapping multiple
+// validation errors returned by
+// VoucherStrategyFixedAmountForAppIds.ValidateAll() if the designated
+// constraints aren't met.
+type VoucherStrategyFixedAmountForAppIdsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m VoucherStrategyFixedAmountForAppIdsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m VoucherStrategyFixedAmountForAppIdsMultiError) AllErrors() []error { return m }
+
+// VoucherStrategyFixedAmountForAppIdsValidationError is the validation error
+// returned by VoucherStrategyFixedAmountForAppIds.Validate if the designated
+// constraints aren't met.
+type VoucherStrategyFixedAmountForAppIdsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VoucherStrategyFixedAmountForAppIdsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VoucherStrategyFixedAmountForAppIdsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VoucherStrategyFixedAmountForAppIdsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VoucherStrategyFixedAmountForAppIdsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VoucherStrategyFixedAmountForAppIdsValidationError) ErrorName() string {
+	return "VoucherStrategyFixedAmountForAppIdsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e VoucherStrategyFixedAmountForAppIdsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVoucherStrategyFixedAmountForAppIds.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VoucherStrategyFixedAmountForAppIdsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VoucherStrategyFixedAmountForAppIdsValidationError{}
+
+// Validate checks the field values on
+// VoucherStrategyPercentageDiscountForAppIds with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *VoucherStrategyPercentageDiscountForAppIds) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on
+// VoucherStrategyPercentageDiscountForAppIds with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in
+// VoucherStrategyPercentageDiscountForAppIdsMultiError, or nil if none found.
+func (m *VoucherStrategyPercentageDiscountForAppIds) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *VoucherStrategyPercentageDiscountForAppIds) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Percentage
+
+	if len(errors) > 0 {
+		return VoucherStrategyPercentageDiscountForAppIdsMultiError(errors)
+	}
+
+	return nil
+}
+
+// VoucherStrategyPercentageDiscountForAppIdsMultiError is an error wrapping
+// multiple validation errors returned by
+// VoucherStrategyPercentageDiscountForAppIds.ValidateAll() if the designated
+// constraints aren't met.
+type VoucherStrategyPercentageDiscountForAppIdsMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m VoucherStrategyPercentageDiscountForAppIdsMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m VoucherStrategyPercentageDiscountForAppIdsMultiError) AllErrors() []error { return m }
+
+// VoucherStrategyPercentageDiscountForAppIdsValidationError is the validation
+// error returned by VoucherStrategyPercentageDiscountForAppIds.Validate if
+// the designated constraints aren't met.
+type VoucherStrategyPercentageDiscountForAppIdsValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e VoucherStrategyPercentageDiscountForAppIdsValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e VoucherStrategyPercentageDiscountForAppIdsValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e VoucherStrategyPercentageDiscountForAppIdsValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e VoucherStrategyPercentageDiscountForAppIdsValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e VoucherStrategyPercentageDiscountForAppIdsValidationError) ErrorName() string {
+	return "VoucherStrategyPercentageDiscountForAppIdsValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e VoucherStrategyPercentageDiscountForAppIdsValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sVoucherStrategyPercentageDiscountForAppIds.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = VoucherStrategyPercentageDiscountForAppIdsValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = VoucherStrategyPercentageDiscountForAppIdsValidationError{}
 
 // Validate checks the field values on DefineVoucherReply with the rules
 // defined in the proto definition for this message. If any rules are
@@ -273,9 +860,9 @@ func (m *DefineCampaignRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for CampaignKey
-
 	// no validation rules for Name
+
+	// no validation rules for Status
 
 	if all {
 		switch v := interface{}(m.GetMetadata()).(type) {
@@ -573,22 +1160,22 @@ var _ interface {
 	ErrorName() string
 } = CampaignMetadataValidationError{}
 
-// Validate checks the field values on Strategy with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Strategy) Validate() error {
+// Validate checks the field values on CampaignStrategy with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *CampaignStrategy) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on Strategy with the rules defined in
-// the proto definition for this message. If any rules are violated, the
-// result is a list of violation errors wrapped in StrategyMultiError, or nil
-// if none found.
-func (m *Strategy) ValidateAll() error {
+// ValidateAll checks the field values on CampaignStrategy with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CampaignStrategyMultiError, or nil if none found.
+func (m *CampaignStrategy) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *Strategy) validate(all bool) error {
+func (m *CampaignStrategy) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -596,9 +1183,9 @@ func (m *Strategy) validate(all bool) error {
 	var errors []error
 
 	switch v := m.Metadata.(type) {
-	case *Strategy_StrategyTopRegister:
+	case *CampaignStrategy_StrategyTopRegister:
 		if v == nil {
-			err := StrategyValidationError{
+			err := CampaignStrategyValidationError{
 				field:  "Metadata",
 				reason: "oneof value cannot be a typed-nil",
 			}
@@ -612,7 +1199,7 @@ func (m *Strategy) validate(all bool) error {
 			switch v := interface{}(m.GetStrategyTopRegister()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StrategyValidationError{
+					errors = append(errors, CampaignStrategyValidationError{
 						field:  "StrategyTopRegister",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -620,7 +1207,7 @@ func (m *Strategy) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, StrategyValidationError{
+					errors = append(errors, CampaignStrategyValidationError{
 						field:  "StrategyTopRegister",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -629,7 +1216,7 @@ func (m *Strategy) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(m.GetStrategyTopRegister()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return StrategyValidationError{
+				return CampaignStrategyValidationError{
 					field:  "StrategyTopRegister",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -637,9 +1224,9 @@ func (m *Strategy) validate(all bool) error {
 			}
 		}
 
-	case *Strategy_StrategySpending:
+	case *CampaignStrategy_StrategySpending:
 		if v == nil {
-			err := StrategyValidationError{
+			err := CampaignStrategyValidationError{
 				field:  "Metadata",
 				reason: "oneof value cannot be a typed-nil",
 			}
@@ -653,7 +1240,7 @@ func (m *Strategy) validate(all bool) error {
 			switch v := interface{}(m.GetStrategySpending()).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StrategyValidationError{
+					errors = append(errors, CampaignStrategyValidationError{
 						field:  "StrategySpending",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -661,7 +1248,7 @@ func (m *Strategy) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, StrategyValidationError{
+					errors = append(errors, CampaignStrategyValidationError{
 						field:  "StrategySpending",
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -670,7 +1257,7 @@ func (m *Strategy) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(m.GetStrategySpending()).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return StrategyValidationError{
+				return CampaignStrategyValidationError{
 					field:  "StrategySpending",
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -683,18 +1270,19 @@ func (m *Strategy) validate(all bool) error {
 	}
 
 	if len(errors) > 0 {
-		return StrategyMultiError(errors)
+		return CampaignStrategyMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategyMultiError is an error wrapping multiple validation errors returned
-// by Strategy.ValidateAll() if the designated constraints aren't met.
-type StrategyMultiError []error
+// CampaignStrategyMultiError is an error wrapping multiple validation errors
+// returned by CampaignStrategy.ValidateAll() if the designated constraints
+// aren't met.
+type CampaignStrategyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategyMultiError) Error() string {
+func (m CampaignStrategyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -703,11 +1291,11 @@ func (m StrategyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategyMultiError) AllErrors() []error { return m }
+func (m CampaignStrategyMultiError) AllErrors() []error { return m }
 
-// StrategyValidationError is the validation error returned by
-// Strategy.Validate if the designated constraints aren't met.
-type StrategyValidationError struct {
+// CampaignStrategyValidationError is the validation error returned by
+// CampaignStrategy.Validate if the designated constraints aren't met.
+type CampaignStrategyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -715,22 +1303,22 @@ type StrategyValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategyValidationError) Field() string { return e.field }
+func (e CampaignStrategyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategyValidationError) Reason() string { return e.reason }
+func (e CampaignStrategyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategyValidationError) Cause() error { return e.cause }
+func (e CampaignStrategyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategyValidationError) Key() bool { return e.key }
+func (e CampaignStrategyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategyValidationError) ErrorName() string { return "StrategyValidationError" }
+func (e CampaignStrategyValidationError) ErrorName() string { return "CampaignStrategyValidationError" }
 
 // Error satisfies the builtin error interface
-func (e StrategyValidationError) Error() string {
+func (e CampaignStrategyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -742,14 +1330,14 @@ func (e StrategyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategy.%s: %s%s",
+		"invalid %sCampaignStrategy.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategyValidationError{}
+var _ error = CampaignStrategyValidationError{}
 
 var _ interface {
 	Field() string
@@ -757,24 +1345,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategyValidationError{}
+} = CampaignStrategyValidationError{}
 
-// Validate checks the field values on StrategyTopRegister with the rules
-// defined in the proto definition for this message. If any rules are
+// Validate checks the field values on CampaignStrategyTopRegister with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *StrategyTopRegister) Validate() error {
+func (m *CampaignStrategyTopRegister) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on StrategyTopRegister with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on CampaignStrategyTopRegister with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// StrategyTopRegisterMultiError, or nil if none found.
-func (m *StrategyTopRegister) ValidateAll() error {
+// CampaignStrategyTopRegisterMultiError, or nil if none found.
+func (m *CampaignStrategyTopRegister) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *StrategyTopRegister) validate(all bool) error {
+func (m *CampaignStrategyTopRegister) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -788,7 +1376,7 @@ func (m *StrategyTopRegister) validate(all bool) error {
 			switch v := interface{}(item).(type) {
 			case interface{ ValidateAll() error }:
 				if err := v.ValidateAll(); err != nil {
-					errors = append(errors, StrategyTopRegisterValidationError{
+					errors = append(errors, CampaignStrategyTopRegisterValidationError{
 						field:  fmt.Sprintf("Vouchers[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -796,7 +1384,7 @@ func (m *StrategyTopRegister) validate(all bool) error {
 				}
 			case interface{ Validate() error }:
 				if err := v.Validate(); err != nil {
-					errors = append(errors, StrategyTopRegisterValidationError{
+					errors = append(errors, CampaignStrategyTopRegisterValidationError{
 						field:  fmt.Sprintf("Vouchers[%v]", idx),
 						reason: "embedded message failed validation",
 						cause:  err,
@@ -805,7 +1393,7 @@ func (m *StrategyTopRegister) validate(all bool) error {
 			}
 		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return StrategyTopRegisterValidationError{
+				return CampaignStrategyTopRegisterValidationError{
 					field:  fmt.Sprintf("Vouchers[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -818,19 +1406,19 @@ func (m *StrategyTopRegister) validate(all bool) error {
 	// no validation rules for TopUsers
 
 	if len(errors) > 0 {
-		return StrategyTopRegisterMultiError(errors)
+		return CampaignStrategyTopRegisterMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategyTopRegisterMultiError is an error wrapping multiple validation
-// errors returned by StrategyTopRegister.ValidateAll() if the designated
-// constraints aren't met.
-type StrategyTopRegisterMultiError []error
+// CampaignStrategyTopRegisterMultiError is an error wrapping multiple
+// validation errors returned by CampaignStrategyTopRegister.ValidateAll() if
+// the designated constraints aren't met.
+type CampaignStrategyTopRegisterMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategyTopRegisterMultiError) Error() string {
+func (m CampaignStrategyTopRegisterMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -839,11 +1427,12 @@ func (m StrategyTopRegisterMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategyTopRegisterMultiError) AllErrors() []error { return m }
+func (m CampaignStrategyTopRegisterMultiError) AllErrors() []error { return m }
 
-// StrategyTopRegisterValidationError is the validation error returned by
-// StrategyTopRegister.Validate if the designated constraints aren't met.
-type StrategyTopRegisterValidationError struct {
+// CampaignStrategyTopRegisterValidationError is the validation error returned
+// by CampaignStrategyTopRegister.Validate if the designated constraints
+// aren't met.
+type CampaignStrategyTopRegisterValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -851,24 +1440,24 @@ type StrategyTopRegisterValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategyTopRegisterValidationError) Field() string { return e.field }
+func (e CampaignStrategyTopRegisterValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategyTopRegisterValidationError) Reason() string { return e.reason }
+func (e CampaignStrategyTopRegisterValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategyTopRegisterValidationError) Cause() error { return e.cause }
+func (e CampaignStrategyTopRegisterValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategyTopRegisterValidationError) Key() bool { return e.key }
+func (e CampaignStrategyTopRegisterValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategyTopRegisterValidationError) ErrorName() string {
-	return "StrategyTopRegisterValidationError"
+func (e CampaignStrategyTopRegisterValidationError) ErrorName() string {
+	return "CampaignStrategyTopRegisterValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e StrategyTopRegisterValidationError) Error() string {
+func (e CampaignStrategyTopRegisterValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -880,14 +1469,14 @@ func (e StrategyTopRegisterValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategyTopRegister.%s: %s%s",
+		"invalid %sCampaignStrategyTopRegister.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategyTopRegisterValidationError{}
+var _ error = CampaignStrategyTopRegisterValidationError{}
 
 var _ interface {
 	Field() string
@@ -895,24 +1484,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategyTopRegisterValidationError{}
+} = CampaignStrategyTopRegisterValidationError{}
 
-// Validate checks the field values on StrategySpending with the rules defined
-// in the proto definition for this message. If any rules are violated, the
-// first error encountered is returned, or nil if there are no violations.
-func (m *StrategySpending) Validate() error {
+// Validate checks the field values on CampaignStrategySpending with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *CampaignStrategySpending) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on StrategySpending with the rules
-// defined in the proto definition for this message. If any rules are
+// ValidateAll checks the field values on CampaignStrategySpending with the
+// rules defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// StrategySpendingMultiError, or nil if none found.
-func (m *StrategySpending) ValidateAll() error {
+// CampaignStrategySpendingMultiError, or nil if none found.
+func (m *CampaignStrategySpending) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *StrategySpending) validate(all bool) error {
+func (m *CampaignStrategySpending) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -920,19 +1509,19 @@ func (m *StrategySpending) validate(all bool) error {
 	var errors []error
 
 	if len(errors) > 0 {
-		return StrategySpendingMultiError(errors)
+		return CampaignStrategySpendingMultiError(errors)
 	}
 
 	return nil
 }
 
-// StrategySpendingMultiError is an error wrapping multiple validation errors
-// returned by StrategySpending.ValidateAll() if the designated constraints
-// aren't met.
-type StrategySpendingMultiError []error
+// CampaignStrategySpendingMultiError is an error wrapping multiple validation
+// errors returned by CampaignStrategySpending.ValidateAll() if the designated
+// constraints aren't met.
+type CampaignStrategySpendingMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m StrategySpendingMultiError) Error() string {
+func (m CampaignStrategySpendingMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -941,11 +1530,11 @@ func (m StrategySpendingMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m StrategySpendingMultiError) AllErrors() []error { return m }
+func (m CampaignStrategySpendingMultiError) AllErrors() []error { return m }
 
-// StrategySpendingValidationError is the validation error returned by
-// StrategySpending.Validate if the designated constraints aren't met.
-type StrategySpendingValidationError struct {
+// CampaignStrategySpendingValidationError is the validation error returned by
+// CampaignStrategySpending.Validate if the designated constraints aren't met.
+type CampaignStrategySpendingValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -953,22 +1542,24 @@ type StrategySpendingValidationError struct {
 }
 
 // Field function returns field value.
-func (e StrategySpendingValidationError) Field() string { return e.field }
+func (e CampaignStrategySpendingValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e StrategySpendingValidationError) Reason() string { return e.reason }
+func (e CampaignStrategySpendingValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e StrategySpendingValidationError) Cause() error { return e.cause }
+func (e CampaignStrategySpendingValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e StrategySpendingValidationError) Key() bool { return e.key }
+func (e CampaignStrategySpendingValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e StrategySpendingValidationError) ErrorName() string { return "StrategySpendingValidationError" }
+func (e CampaignStrategySpendingValidationError) ErrorName() string {
+	return "CampaignStrategySpendingValidationError"
+}
 
 // Error satisfies the builtin error interface
-func (e StrategySpendingValidationError) Error() string {
+func (e CampaignStrategySpendingValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -980,14 +1571,14 @@ func (e StrategySpendingValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sStrategySpending.%s: %s%s",
+		"invalid %sCampaignStrategySpending.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = StrategySpendingValidationError{}
+var _ error = CampaignStrategySpendingValidationError{}
 
 var _ interface {
 	Field() string
@@ -995,7 +1586,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = StrategySpendingValidationError{}
+} = CampaignStrategySpendingValidationError{}
 
 // Validate checks the field values on Voucher with the rules defined in the
 // proto definition for this message. If any rules are violated, the first

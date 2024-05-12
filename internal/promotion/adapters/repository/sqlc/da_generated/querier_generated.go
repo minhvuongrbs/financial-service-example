@@ -11,8 +11,8 @@ import (
 type Querier interface {
 	CreateVoucherUser(ctx context.Context, arg *CreateVoucherUserParams) (int64, error)
 	GetCampaignById(ctx context.Context, id int64) (*Campaign, error)
-	InsertVoucher(ctx context.Context, arg *InsertVoucherParams) (int64, error)
 	UpdateCampaign(ctx context.Context, arg *UpdateCampaignParams) (int64, error)
+	UpdateVoucher(ctx context.Context, arg *UpdateVoucherParams) (int64, error)
 }
 
 var _ Querier = (*Queries)(nil)

@@ -19,17 +19,39 @@ service PromotionAdmin {
 
   rpc DefineVoucher (DefineVoucherRequest) returns (DefineVoucherReply){
     option (google.api.http) = {
-      post: "/api/app/v1/promotion-admin/voucher/define"
+      post: "/api/app/v1/promotion-admin/vouchers/define"
       body: "*"
     };
   };
 }
 
 message DefineVoucherRequest {
-  string voucher_type = 1;
-  int64 amount = 2;
-  string expiration_time = 3; // rfc3339 datetime
-  string app_id = 4; // * will be all app_id
+  string name = 1;
+  bool is_active = 2;
+  string description = 3;
+  VoucherMetadata metadata = 4;
+}
+
+message VoucherMetadata {
+  google.protobuf.Timestamp expiration_time = 1;
+  VoucherStrategy strategy = 2;
+}
+
+message VoucherStrategy {
+  oneof metadata {
+    VoucherStrategyFixedAmountForAppIds fixed_amount_for_app_ids = 1;
+    VoucherStrategyPercentageDiscountForAppIds percentage_discount_for_app_ids = 2;
+  }
+}
+
+message VoucherStrategyFixedAmountForAppIds {
+  int64 amount = 1;
+  repeated int64 app_id = 2;
+}
+
+message VoucherStrategyPercentageDiscountForAppIds {
+  int64 percentage = 1; // 30% => 30
+  repeated int64 app_id = 2;
 }
 
 message DefineVoucherReply {
@@ -37,32 +59,36 @@ message DefineVoucherReply {
   string message = 2;
 }
 
+enum CampaignStatus {
+  CAMPAIGN_STATUS_ACTIVE = 0;
+  CAMPAIGN_STATUS_INACTIVE = 1;
+}
 
 message DefineCampaignRequest {
-  string campaign_key = 1;
-  string name = 2;
+  string name = 1;
+  CampaignStatus status = 2;
   CampaignMetadata metadata = 3;
 }
 
 message CampaignMetadata {
   google.protobuf.Timestamp start_at = 1;
   google.protobuf.Timestamp end_at = 2;
-  Strategy strategy = 3;
+  CampaignStrategy strategy = 3;
 }
 
-message Strategy {
+message CampaignStrategy {
   oneof metadata {
-    StrategyTopRegister strategy_top_register = 2;
-    StrategySpending strategy_spending = 3;
+    CampaignStrategyTopRegister strategy_top_register = 2;
+    CampaignStrategySpending strategy_spending = 3;
   }
 }
 
-message StrategyTopRegister {
+message CampaignStrategyTopRegister {
     repeated Voucher vouchers = 1;
     int64 top_users = 2;
 }
 
-message StrategySpending {}
+message CampaignStrategySpending {}
 
 message Voucher {
   int64 id = 1;

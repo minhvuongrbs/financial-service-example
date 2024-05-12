@@ -9,7 +9,6 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 type CampaignStatus string
@@ -54,48 +53,6 @@ func (ns NullCampaignStatus) Value() (driver.Value, error) {
 	return string(ns.CampaignStatus), nil
 }
 
-type VoucherVoucherType string
-
-const (
-	VoucherVoucherTypeFixedAmount        VoucherVoucherType = "fixed_amount"
-	VoucherVoucherTypePercentageDiscount VoucherVoucherType = "percentage_discount"
-)
-
-func (e *VoucherVoucherType) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = VoucherVoucherType(s)
-	case string:
-		*e = VoucherVoucherType(s)
-	default:
-		return fmt.Errorf("unsupported scan type for VoucherVoucherType: %T", src)
-	}
-	return nil
-}
-
-type NullVoucherVoucherType struct {
-	VoucherVoucherType VoucherVoucherType `json:"voucher_voucher_type"`
-	Valid              bool               `json:"valid"` // Valid is true if VoucherVoucherType is not NULL
-}
-
-// Scan implements the Scanner interface.
-func (ns *NullVoucherVoucherType) Scan(value interface{}) error {
-	if value == nil {
-		ns.VoucherVoucherType, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.VoucherVoucherType.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullVoucherVoucherType) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.VoucherVoucherType), nil
-}
-
 type Campaign struct {
 	ID     int64          `json:"id"`
 	Status CampaignStatus `json:"status"`
@@ -114,18 +71,15 @@ type CampaignUser struct {
 	UpdatedAt  sql.NullTime `json:"updated_at"`
 }
 
-type Voucher struct {
-	ID             int64              `json:"id"`
-	VoucherType    VoucherVoucherType `json:"voucher_type"`
-	Amount         string             `json:"amount"`
-	IsActive       bool               `json:"is_active"`
-	ExpirationTime time.Time          `json:"expiration_time"`
-	// * will apply to all app_id
-	AppID       string       `json:"app_id"`
-	Title       string       `json:"title"`
-	Description string       `json:"description"`
-	CreatedAt   sql.NullTime `json:"created_at"`
-	UpdatedAt   sql.NullTime `json:"updated_at"`
+type VoucherInfo struct {
+	ID          int64  `json:"id"`
+	IsActive    bool   `json:"is_active"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	// metadata of voucher
+	Metadata  json.RawMessage `json:"metadata"`
+	CreatedAt sql.NullTime    `json:"created_at"`
+	UpdatedAt sql.NullTime    `json:"updated_at"`
 }
 
 type VoucherUser struct {

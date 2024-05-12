@@ -30,11 +30,11 @@ func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	if q.getCampaignByIdStmt, err = db.PrepareContext(ctx, getCampaignById); err != nil {
 		return nil, fmt.Errorf("error preparing query GetCampaignById: %w", err)
 	}
-	if q.insertVoucherStmt, err = db.PrepareContext(ctx, insertVoucher); err != nil {
-		return nil, fmt.Errorf("error preparing query InsertVoucher: %w", err)
-	}
 	if q.updateCampaignStmt, err = db.PrepareContext(ctx, updateCampaign); err != nil {
 		return nil, fmt.Errorf("error preparing query UpdateCampaign: %w", err)
+	}
+	if q.updateVoucherStmt, err = db.PrepareContext(ctx, updateVoucher); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateVoucher: %w", err)
 	}
 	return &q, nil
 }
@@ -51,14 +51,14 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing getCampaignByIdStmt: %w", cerr)
 		}
 	}
-	if q.insertVoucherStmt != nil {
-		if cerr := q.insertVoucherStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing insertVoucherStmt: %w", cerr)
-		}
-	}
 	if q.updateCampaignStmt != nil {
 		if cerr := q.updateCampaignStmt.Close(); cerr != nil {
 			err = fmt.Errorf("error closing updateCampaignStmt: %w", cerr)
+		}
+	}
+	if q.updateVoucherStmt != nil {
+		if cerr := q.updateVoucherStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateVoucherStmt: %w", cerr)
 		}
 	}
 	return err
@@ -102,8 +102,8 @@ type Queries struct {
 	tx                    *sql.Tx
 	createVoucherUserStmt *sql.Stmt
 	getCampaignByIdStmt   *sql.Stmt
-	insertVoucherStmt     *sql.Stmt
 	updateCampaignStmt    *sql.Stmt
+	updateVoucherStmt     *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
@@ -112,7 +112,7 @@ func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 		tx:                    tx,
 		createVoucherUserStmt: q.createVoucherUserStmt,
 		getCampaignByIdStmt:   q.getCampaignByIdStmt,
-		insertVoucherStmt:     q.insertVoucherStmt,
 		updateCampaignStmt:    q.updateCampaignStmt,
+		updateVoucherStmt:     q.updateVoucherStmt,
 	}
 }

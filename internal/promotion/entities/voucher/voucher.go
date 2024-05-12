@@ -1,20 +1,21 @@
 package voucher
 
-import "time"
-
 type Voucher struct {
 	Id int64
 
-	Type           Type
-	Amount         int64
-	IsActive       bool
-	ExpirationTime time.Time
-	AppId          string
+	Name        string
+	Description string
+
+	Metadata Metadata
+	IsActive bool
 }
 
-type Type int
-
-const (
-	FixedAmount Type = iota
-	PercentageDiscount
-)
+func NewVoucher(id int64, name, description string, isActive bool, metadata Metadata) *Voucher {
+	return &Voucher{
+		Id:          id,
+		Name:        name,
+		Description: description,
+		Metadata:    metadata,
+		IsActive:    isActive,
+	}
+}

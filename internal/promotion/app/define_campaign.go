@@ -18,7 +18,6 @@ func NewDefineCampaignHandler(campaignRepo campaignRepo) DefineCampaignHandler {
 }
 
 type DefineCampaignRequest struct {
-	Key      string
 	Name     string
 	status   campaign.Status
 	Metadata campaign.Metadata

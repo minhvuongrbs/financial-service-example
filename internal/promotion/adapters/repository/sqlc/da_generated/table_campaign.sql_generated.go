@@ -31,7 +31,7 @@ func (q *Queries) GetCampaignById(ctx context.Context, id int64) (*Campaign, err
 
 const updateCampaign = `-- name: UpdateCampaign :execrows
 insert into campaign (id, status, name, metadata)
-VALUES (?, ?, ?,?)
+VALUES (?, ?, ?, ?)
 ON DUPLICATE KEY UPDATE
     status = ?,
     name = ?,

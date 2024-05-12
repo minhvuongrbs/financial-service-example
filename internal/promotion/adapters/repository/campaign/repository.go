@@ -27,7 +27,7 @@ func (r Repository) DefineCampaign(ctx context.Context, c *campaign.Campaign) er
 	}
 	metadata, err := json.Marshal(c.Metadata)
 	if err != nil {
-		return fmt.Errorf("json marshal vourchers failed: %w", err)
+		return fmt.Errorf("json marshal metadata failed: %w", err)
 	}
 
 	rows, err := q.UpdateCampaign(ctx, &da_generated.UpdateCampaignParams{

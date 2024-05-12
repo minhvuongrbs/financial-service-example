@@ -1,13 +1,10 @@
-CREATE TABLE voucher
+CREATE TABLE voucher_info
 (
     id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-    voucher_type    ENUM('fixed_amount', 'percentage_discount') NOT NULL,
-    amount          DECIMAL(10, 2) NOT NULL,
     is_active       BOOL           NOT NULL DEFAULT FALSE,
-    expiration_time DATETIME       NOT NULL,
-    app_id          VARCHAR(255)   NOT NULL COMMENT '* will apply to all app_id',
-    title           VARCHAR(1000)  NOT NULL,
+    name           VARCHAR(1000)  NOT NULL,
     description     VARCHAR(1000)  NOT NULL DEFAULT '',
+    metadata   JSON                        NOT NULL DEFAULT (JSON_OBJECT()) COMMENT 'metadata of voucher',
     created_at      TIMESTAMP               DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

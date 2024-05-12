@@ -11,8 +11,8 @@ type StrategyTopRegister struct {
 type StrategyName string
 
 const (
-	StrategyNameTopRegister = "StrategyTopRegister"
-	StrategyNameSpending    = "StrategySpending"
+	StrategyNameTopRegister = "TopRegister"
+	StrategyNameSpending    = "Spending"
 )
 
 type StrategySpending struct {

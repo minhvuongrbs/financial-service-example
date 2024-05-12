@@ -11,7 +11,7 @@ CREATE TABLE campaign
 
 -- name: UpdateCampaign :execrows
 insert into campaign (id, status, name, metadata)
-VALUES (?, sqlc.arg(status), sqlc.arg(name),sqlc.arg(metadata))
+VALUES (?, sqlc.arg(status), sqlc.arg(name), sqlc.arg(metadata))
 ON DUPLICATE KEY UPDATE
     status = sqlc.arg(status),
     name = sqlc.arg(name),
