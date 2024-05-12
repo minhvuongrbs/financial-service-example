@@ -25,9 +25,17 @@ func NewHTTPGatewayServices(conf config.Config) ([]http_server.GrpcGatewayServic
 	if err != nil {
 		return nil, fmt.Errorf("failed to init promotion admin http: %w", err)
 	}
+	promotionHttpGwService, err := promotionhttp.NewPromotionGatewayService(promotionhttp.GrpcClientConfig{
+		Host: conf.GRPC.Host,
+		Port: conf.GRPC.Port,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("failed to init promotion http: %w", err)
+	}
 
 	return []http_server.GrpcGatewayServices{
 		authHttpGwService,
 		promotionAdminHttpGwService,
+		promotionHttpGwService,
 	}, nil
 }

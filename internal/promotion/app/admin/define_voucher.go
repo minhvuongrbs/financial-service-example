@@ -1,4 +1,4 @@
-package app
+package admin
 
 import (
 	"context"
@@ -9,10 +9,6 @@ import (
 
 type DefineVoucherHandler struct {
 	voucherRepo voucherRepo
-}
-
-type voucherRepo interface {
-	UpdateVoucher(ctx context.Context, v *voucher.Voucher) error
 }
 
 func NewDefineVoucherHandler(voucherRepo voucherRepo) DefineVoucherHandler {

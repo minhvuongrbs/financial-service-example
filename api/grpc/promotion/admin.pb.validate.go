@@ -540,7 +540,7 @@ func (m *VoucherStrategyFixedAmountForAppIds) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Percentage
+	// no validation rules for Amount
 
 	if len(errors) > 0 {
 		return VoucherStrategyFixedAmountForAppIdsMultiError(errors)

@@ -12,14 +12,14 @@ import "protoc-gen-swagger/options/annotations.proto";
 service Promotion {
   rpc JoinCampaign (JoinCampaignRequest) returns (JoinCampaignReply){
     option (google.api.http) = {
-      post: "/api/app/v1/promotion-service/join-campaign"
+      post: "/api/app/v1/promotion-service/campaigns/join"
       body: "*"
     };
   };
 }
 
 message JoinCampaignRequest {
-  int64 campaign_key = 1;
+  int64 campaign_id = 1;
 }
 
 message JoinCampaignReply {

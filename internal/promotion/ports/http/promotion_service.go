@@ -10,35 +10,28 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-type AdminService struct {
+type PromotionService struct {
 	grpcServerConn *grpc.ClientConn
 }
 
-type GrpcClientConfig struct {
-	Host string `json:"host" mapstructure:"host" yaml:"host"`
-	Port int    `json:"port" mapstructure:"port" yaml:"port"`
-}
-
-func NewPromotionAdminGatewayService(cfg GrpcClientConfig) (*AdminService, error) {
+func NewPromotionGatewayService(cfg GrpcClientConfig) (*PromotionService, error) {
 	grpcServerAddr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
 	grpcServerConn, err := grpc.Dial(grpcServerAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultCallOptions(),
-		//grpc.WithChainUnaryInterceptor(),
-		//grpc.WithUnaryInterceptor(),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("fail to dial gRPC server(%s): %w", grpcServerAddr, err)
 	}
-	return &AdminService{
+	return &PromotionService{
 		grpcServerConn: grpcServerConn,
 	}, nil
 }
 
-func (s *AdminService) HTTPGatewayRegister(mux *runtime.ServeMux) error {
-	err := promotion.RegisterPromotionAdminHandler(context.Background(), mux, s.grpcServerConn)
+func (s *PromotionService) HTTPGatewayRegister(mux *runtime.ServeMux) error {
+	err := promotion.RegisterPromotionHandler(context.Background(), mux, s.grpcServerConn)
 	if err != nil {
-		return fmt.Errorf("failed to register http gateway for promotion admin service: %w", err)
+		return fmt.Errorf("failed to register http gateway for promotion service: %w", err)
 	}
 	return nil
 }

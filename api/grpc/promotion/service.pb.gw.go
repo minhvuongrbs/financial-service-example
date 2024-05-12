@@ -71,7 +71,7 @@ func RegisterPromotionHandlerServer(ctx context.Context, mux *runtime.ServeMux, 
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/promotion.service.Promotion/JoinCampaign", runtime.WithHTTPPathPattern("/api/app/v1/promotion-service/join-campaign"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/promotion.service.Promotion/JoinCampaign", runtime.WithHTTPPathPattern("/api/app/v1/promotion-service/campaigns/join"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -135,7 +135,7 @@ func RegisterPromotionHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/promotion.service.Promotion/JoinCampaign", runtime.WithHTTPPathPattern("/api/app/v1/promotion-service/join-campaign"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/promotion.service.Promotion/JoinCampaign", runtime.WithHTTPPathPattern("/api/app/v1/promotion-service/campaigns/join"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -155,7 +155,7 @@ func RegisterPromotionHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 }
 
 var (
-	pattern_Promotion_JoinCampaign_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"api", "app", "v1", "promotion-service", "join-campaign"}, ""))
+	pattern_Promotion_JoinCampaign_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 2, 5}, []string{"api", "app", "v1", "promotion-service", "campaigns", "join"}, ""))
 )
 
 var (

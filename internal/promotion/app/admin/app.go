@@ -1,4 +1,4 @@
-package app
+package admin
 
 type App struct {
 	DefineCampaignHandler DefineCampaignHandler

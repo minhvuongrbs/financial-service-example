@@ -57,7 +57,7 @@ func (m *JoinCampaignRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for CampaignKey
+	// no validation rules for CampaignId
 
 	if len(errors) > 0 {
 		return JoinCampaignRequestMultiError(errors)

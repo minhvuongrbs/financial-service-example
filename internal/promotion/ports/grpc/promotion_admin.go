@@ -9,7 +9,7 @@ import (
 	"github.com/minhvuongrbs/financial-service-example/internal/common/utils"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/adapters/repository/campaign"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/adapters/repository/voucher"
-	"github.com/minhvuongrbs/financial-service-example/internal/promotion/app"
+	"github.com/minhvuongrbs/financial-service-example/internal/promotion/app/admin"
 	entitycampaign "github.com/minhvuongrbs/financial-service-example/internal/promotion/entities/campaign"
 	entityvoucher "github.com/minhvuongrbs/financial-service-example/internal/promotion/entities/voucher"
 	"google.golang.org/grpc"
@@ -17,7 +17,28 @@ import (
 
 type AdminService struct {
 	promotion.UnimplementedPromotionAdminServer
-	App app.App
+	App admin.App
+}
+
+func NewPromotionAdminService(conf config.Config) (AdminService, error) {
+	// load config
+	infraDependencies, err := initInfrastructure(conf)
+	if err != nil {
+		return AdminService{}, fmt.Errorf("failed to init infra dependcies: %w", err)
+	}
+	campaignRepo := campaign.NewRepository(infraDependencies.db)
+	voucherRepo := voucher.NewRepository(infraDependencies.db)
+
+	return AdminService{
+		App: admin.App{
+			DefineCampaignHandler: admin.NewDefineCampaignHandler(campaignRepo),
+			DefineVoucherHandler:  admin.NewDefineVoucherHandler(voucherRepo),
+		},
+	}, nil
+}
+
+func (s AdminService) RegisterService(grpcServiceRegistrar grpc.ServiceRegistrar) {
+	promotion.RegisterPromotionAdminServer(grpcServiceRegistrar, s)
 }
 
 func (s AdminService) DefineCampaign(ctx context.Context, req *promotion.DefineCampaignRequest) (*promotion.DefineCampaignReply, error) {
@@ -25,7 +46,7 @@ func (s AdminService) DefineCampaign(ctx context.Context, req *promotion.DefineC
 	if err != nil {
 		return nil, fmt.Errorf("invalid campaign metadata: %w", err)
 	}
-	appReq := app.DefineCampaignRequest{
+	appReq := admin.DefineCampaignRequest{
 		Name:     req.Name,
 		Metadata: md,
 	}
@@ -67,7 +88,7 @@ func (s AdminService) DefineVoucher(ctx context.Context, req *promotion.DefineVo
 		return nil, fmt.Errorf("invalid voucher strategy: %v", v)
 	}
 
-	err := s.App.DefineVoucherHandler.Handle(ctx, app.DefineVoucherRequest{
+	err := s.App.DefineVoucherHandler.Handle(ctx, admin.DefineVoucherRequest{
 		Name:        req.Name,
 		Description: req.Description,
 		IsActive:    req.IsActive,
@@ -83,30 +104,4 @@ func (s AdminService) DefineVoucher(ctx context.Context, req *promotion.DefineVo
 		Code:    utils.CodeSuccess,
 		Message: utils.MessageSuccess,
 	}, nil
-}
-
-func (s AdminService) mustEmbedUnimplementedPromotionAdminServer() {
-	//TODO implement me
-	panic("implement me")
-}
-
-func NewPromotionAdminService(conf config.Config) (AdminService, error) {
-	// load config
-	infraDependencies, err := initInfrastructure(conf)
-	if err != nil {
-		return AdminService{}, fmt.Errorf("failed to init infra dependcies: %w", err)
-	}
-	campaignRepo := campaign.NewRepository(infraDependencies.db)
-	voucherRepo := voucher.NewRepository(infraDependencies.db)
-
-	return AdminService{
-		App: app.App{
-			DefineCampaignHandler: app.NewDefineCampaignHandler(campaignRepo),
-			DefineVoucherHandler:  app.NewDefineVoucherHandler(voucherRepo),
-		},
-	}, nil
-}
-
-func (s AdminService) RegisterService(grpcServiceRegistrar grpc.ServiceRegistrar) {
-	promotion.RegisterPromotionAdminServer(grpcServiceRegistrar, s)
 }

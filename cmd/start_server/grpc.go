@@ -22,10 +22,15 @@ func NewGrpcServices(conf config.Config, infra infrastructureDependencies, adapt
 	if err != nil {
 		return nil, fmt.Errorf("failed to new promotion admin service: %w", err)
 	}
+	promotionService, err := NewPromotionService(conf)
+	if err != nil {
+		return nil, fmt.Errorf("failed to new promotion service: %w", err)
+	}
 
 	return []grpc_server.Service{
 		authService,
 		promotionAdminService,
+		promotionService,
 	}, nil
 }
 
@@ -48,6 +53,14 @@ func NewPromotionAdminService(conf config.Config) (promotiongrpc.AdminService, e
 	service, err := promotiongrpc.NewPromotionAdminService(conf)
 	if err != nil {
 		return promotiongrpc.AdminService{}, fmt.Errorf("failed to init promotion admin service: %w", err)
+	}
+	return service, nil
+}
+
+func NewPromotionService(conf config.Config) (promotiongrpc.PromotionService, error) {
+	service, err := promotiongrpc.NewPromotionService(conf)
+	if err != nil {
+		return promotiongrpc.PromotionService{}, fmt.Errorf("failed to init promotion service: %w", err)
 	}
 	return service, nil
 }

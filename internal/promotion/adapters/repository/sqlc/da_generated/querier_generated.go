@@ -9,8 +9,10 @@ import (
 )
 
 type Querier interface {
+	CreateCampaignUser(ctx context.Context, arg *CreateCampaignUserParams) (int64, error)
 	CreateVoucherUser(ctx context.Context, arg *CreateVoucherUserParams) (int64, error)
 	GetCampaignById(ctx context.Context, id int64) (*Campaign, error)
+	GetCampaignUser(ctx context.Context, arg *GetCampaignUserParams) (*CampaignUser, error)
 	UpdateCampaign(ctx context.Context, arg *UpdateCampaignParams) (int64, error)
 	UpdateVoucher(ctx context.Context, arg *UpdateVoucherParams) (int64, error)
 }

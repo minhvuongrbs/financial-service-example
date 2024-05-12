@@ -9,7 +9,7 @@ consumes:
 produces:
   - application/json
 paths:
-  /api/app/v1/promotion-service/join-campaign:
+  /api/app/v1/promotion-service/campaigns/join:
     post:
       operationId: Promotion_JoinCampaign
       responses:
@@ -171,6 +171,6 @@ definitions:
   serviceJoinCampaignRequest:
     type: object
     properties:
-      campaignKey:
+      campaignId:
         type: string
         format: int64

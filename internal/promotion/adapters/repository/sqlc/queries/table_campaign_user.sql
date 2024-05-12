@@ -7,8 +7,12 @@ CREATE TABLE campaign_user
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uk__campaign_user__campaign_id__user_id (campaign_id, user_id)
-)
+);
 
--- name: GetCampaignUserByCampaignId :one
+-- name: GetCampaignUser :one
 select *
-from campaign_user where campaign_id = ?;
+from campaign_user where campaign_id = ? and user_id = ?;
+
+-- name: CreateCampaignUser :execrows
+INSERT INTO campaign_user(campaign_id, user_id)
+VALUES (?, ?)
