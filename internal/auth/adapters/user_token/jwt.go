@@ -11,21 +11,15 @@ import (
 
 type JWTToken struct {
 	generator     *jwt.JwtRSAGenerator
-	validator     *jwt.JwtRSAValiator
 	tokenDuration time.Duration
 }
 
 type Config struct {
 	PrivateKeyPath string        `json:"private_key_path" mapstructure:"private_key_path"`
-	PublicKeyPath  string        `json:"public_key_path" mapstructure:"public_key_path"`
 	TokenDuration  time.Duration `json:"token_duration" mapstructure:"token_duration"`
 }
 
 func NewJWTToken(cfg Config) (JWTToken, error) {
-	validator, err := jwt.NewJwtRSAValidatorFromFile(cfg.PublicKeyPath)
-	if err != nil {
-		return JWTToken{}, fmt.Errorf("new jwt rsa validator from file: %w", err)
-	}
 	generator, err := jwt.NewJwtRSAGeneratorFromFile(cfg.PrivateKeyPath)
 	if err != nil {
 		return JWTToken{}, fmt.Errorf("new jwt rsa generator from file: %w", err)
@@ -33,7 +27,6 @@ func NewJWTToken(cfg Config) (JWTToken, error) {
 
 	return JWTToken{
 		generator:     generator,
-		validator:     validator,
 		tokenDuration: cfg.TokenDuration,
 	}, nil
 }
@@ -55,20 +48,4 @@ func (j JWTToken) GenerateToken(m user.TokenData) (string, error) {
 		return "", fmt.Errorf("generate token: %w", err)
 	}
 	return token, nil
-}
-
-func (j JWTToken) ValidateToken(token string) (user.TokenData, error) {
-	tokenData, err := j.validator.ValidateToken(token)
-	if err != nil {
-		return user.TokenData{}, fmt.Errorf("validate token: %w", err)
-	}
-	bs, err := json.Marshal(tokenData)
-	if err != nil {
-		return user.TokenData{}, fmt.Errorf("marshal token data: %w", err)
-	}
-	var u user.TokenData
-	if err := json.Unmarshal(bs, &u); err != nil {
-		return user.TokenData{}, fmt.Errorf("unmarshal token data: %w", err)
-	}
-	return u, nil
 }

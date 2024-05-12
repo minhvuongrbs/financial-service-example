@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/minhvuongrbs/financial-service-example/internal/auth/entities/user"
+	"github.com/minhvuongrbs/financial-service-example/internal/promotion/entities/authenticate"
 	"github.com/minhvuongrbs/financial-service-example/pkg/jwt"
 )
 
@@ -27,18 +27,18 @@ func NewJWTToken(cfg Config) (JWTToken, error) {
 	}, nil
 }
 
-func (j JWTToken) ValidateToken(token string) (user.TokenData, error) {
+func (j JWTToken) ValidateToken(token string) (authenticate.TokenData, error) {
 	tokenData, err := j.validator.ValidateToken(token)
 	if err != nil {
-		return user.TokenData{}, fmt.Errorf("validate token: %w", err)
+		return authenticate.TokenData{}, fmt.Errorf("validate token: %w", err)
 	}
 	bs, err := json.Marshal(tokenData)
 	if err != nil {
-		return user.TokenData{}, fmt.Errorf("marshal token data: %w", err)
+		return authenticate.TokenData{}, fmt.Errorf("marshal token data: %w", err)
 	}
-	var u user.TokenData
+	var u authenticate.TokenData
 	if err := json.Unmarshal(bs, &u); err != nil {
-		return user.TokenData{}, fmt.Errorf("unmarshal token data: %w", err)
+		return authenticate.TokenData{}, fmt.Errorf("unmarshal token data: %w", err)
 	}
 	return u, nil
 }

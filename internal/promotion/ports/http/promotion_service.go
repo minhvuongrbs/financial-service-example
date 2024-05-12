@@ -14,9 +14,10 @@ type PromotionService struct {
 	grpcServerConn *grpc.ClientConn
 }
 
-func NewPromotionGatewayService(cfg GrpcClientConfig) (*PromotionService, error) {
-	grpcServerAddr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
-	grpcServerConn, err := grpc.Dial(grpcServerAddr,
+func NewPromotionGatewayService(grpcClientConfig GrpcClientConfig) (*PromotionService, error) {
+	grpcServerAddr := fmt.Sprintf("%s:%d", grpcClientConfig.Host, grpcClientConfig.Port)
+	grpcServerConn, err := grpc.Dial(
+		grpcServerAddr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultCallOptions(),
 	)
