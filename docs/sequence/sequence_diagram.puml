@@ -33,13 +33,13 @@ end
 group Promotion
   user -> app: access campaign
   deactivate user
-  app -> promotionservice: call API <color green>participate campaign</color>
+  app -> promotionservice: call API <color green>join campaign</color>
   activate promotionservice
   promotionservice -> redis: check campaign status
   alt calling failed or campaign is inactive
     promotionservice --> app: campaign not found
   end
-  promotionservice -> db: persist account participate campaign
+  promotionservice -> db: persist account join campaign
 
   activate promotionjob
   promotionjob -> db: polling to generate voucher each 5m
