@@ -24,41 +24,41 @@ func New(db DBTX) *Queries {
 func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	q := Queries{db: db}
 	var err error
-	if q.createAccountStmt, err = db.PrepareContext(ctx, createAccount); err != nil {
-		return nil, fmt.Errorf("error preparing query CreateAccount: %w", err)
+	if q.createUserStmt, err = db.PrepareContext(ctx, createUser); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateUser: %w", err)
 	}
-	if q.getAccountByEmailStmt, err = db.PrepareContext(ctx, getAccountByEmail); err != nil {
-		return nil, fmt.Errorf("error preparing query GetAccountByEmail: %w", err)
+	if q.getUserByUsernameEmailStmt, err = db.PrepareContext(ctx, getUserByUsernameEmail); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUserByUsernameEmail: %w", err)
 	}
-	if q.getAccountByPhoneNumberStmt, err = db.PrepareContext(ctx, getAccountByPhoneNumber); err != nil {
-		return nil, fmt.Errorf("error preparing query GetAccountByPhoneNumber: %w", err)
+	if q.getUserByUsernamePhoneNumberStmt, err = db.PrepareContext(ctx, getUserByUsernamePhoneNumber); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUserByUsernamePhoneNumber: %w", err)
 	}
-	if q.getAccountByUsernameStmt, err = db.PrepareContext(ctx, getAccountByUsername); err != nil {
-		return nil, fmt.Errorf("error preparing query GetAccountByUsername: %w", err)
+	if q.getUserByUsernameUsernameStmt, err = db.PrepareContext(ctx, getUserByUsernameUsername); err != nil {
+		return nil, fmt.Errorf("error preparing query GetUserByUsernameUsername: %w", err)
 	}
 	return &q, nil
 }
 
 func (q *Queries) Close() error {
 	var err error
-	if q.createAccountStmt != nil {
-		if cerr := q.createAccountStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing createAccountStmt: %w", cerr)
+	if q.createUserStmt != nil {
+		if cerr := q.createUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createUserStmt: %w", cerr)
 		}
 	}
-	if q.getAccountByEmailStmt != nil {
-		if cerr := q.getAccountByEmailStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getAccountByEmailStmt: %w", cerr)
+	if q.getUserByUsernameEmailStmt != nil {
+		if cerr := q.getUserByUsernameEmailStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserByUsernameEmailStmt: %w", cerr)
 		}
 	}
-	if q.getAccountByPhoneNumberStmt != nil {
-		if cerr := q.getAccountByPhoneNumberStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getAccountByPhoneNumberStmt: %w", cerr)
+	if q.getUserByUsernamePhoneNumberStmt != nil {
+		if cerr := q.getUserByUsernamePhoneNumberStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserByUsernamePhoneNumberStmt: %w", cerr)
 		}
 	}
-	if q.getAccountByUsernameStmt != nil {
-		if cerr := q.getAccountByUsernameStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getAccountByUsernameStmt: %w", cerr)
+	if q.getUserByUsernameUsernameStmt != nil {
+		if cerr := q.getUserByUsernameUsernameStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getUserByUsernameUsernameStmt: %w", cerr)
 		}
 	}
 	return err
@@ -98,21 +98,21 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 }
 
 type Queries struct {
-	db                          DBTX
-	tx                          *sql.Tx
-	createAccountStmt           *sql.Stmt
-	getAccountByEmailStmt       *sql.Stmt
-	getAccountByPhoneNumberStmt *sql.Stmt
-	getAccountByUsernameStmt    *sql.Stmt
+	db                               DBTX
+	tx                               *sql.Tx
+	createUserStmt                   *sql.Stmt
+	getUserByUsernameEmailStmt       *sql.Stmt
+	getUserByUsernamePhoneNumberStmt *sql.Stmt
+	getUserByUsernameUsernameStmt    *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db:                          tx,
-		tx:                          tx,
-		createAccountStmt:           q.createAccountStmt,
-		getAccountByEmailStmt:       q.getAccountByEmailStmt,
-		getAccountByPhoneNumberStmt: q.getAccountByPhoneNumberStmt,
-		getAccountByUsernameStmt:    q.getAccountByUsernameStmt,
+		db:                               tx,
+		tx:                               tx,
+		createUserStmt:                   q.createUserStmt,
+		getUserByUsernameEmailStmt:       q.getUserByUsernameEmailStmt,
+		getUserByUsernamePhoneNumberStmt: q.getUserByUsernamePhoneNumberStmt,
+		getUserByUsernameUsernameStmt:    q.getUserByUsernameUsernameStmt,
 	}
 }

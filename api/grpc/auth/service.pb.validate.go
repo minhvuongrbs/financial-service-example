@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on RegisterAccountRequest with the rules
+// Validate checks the field values on RegisterUserRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
-func (m *RegisterAccountRequest) Validate() error {
+func (m *RegisterUserRequest) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on RegisterAccountRequest with the rules
+// ValidateAll checks the field values on RegisterUserRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// RegisterAccountRequestMultiError, or nil if none found.
-func (m *RegisterAccountRequest) ValidateAll() error {
+// RegisterUserRequestMultiError, or nil if none found.
+func (m *RegisterUserRequest) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *RegisterAccountRequest) validate(all bool) error {
+func (m *RegisterUserRequest) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -70,19 +70,19 @@ func (m *RegisterAccountRequest) validate(all bool) error {
 	// no validation rules for Birthday
 
 	if len(errors) > 0 {
-		return RegisterAccountRequestMultiError(errors)
+		return RegisterUserRequestMultiError(errors)
 	}
 
 	return nil
 }
 
-// RegisterAccountRequestMultiError is an error wrapping multiple validation
-// errors returned by RegisterAccountRequest.ValidateAll() if the designated
+// RegisterUserRequestMultiError is an error wrapping multiple validation
+// errors returned by RegisterUserRequest.ValidateAll() if the designated
 // constraints aren't met.
-type RegisterAccountRequestMultiError []error
+type RegisterUserRequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m RegisterAccountRequestMultiError) Error() string {
+func (m RegisterUserRequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -91,11 +91,11 @@ func (m RegisterAccountRequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m RegisterAccountRequestMultiError) AllErrors() []error { return m }
+func (m RegisterUserRequestMultiError) AllErrors() []error { return m }
 
-// RegisterAccountRequestValidationError is the validation error returned by
-// RegisterAccountRequest.Validate if the designated constraints aren't met.
-type RegisterAccountRequestValidationError struct {
+// RegisterUserRequestValidationError is the validation error returned by
+// RegisterUserRequest.Validate if the designated constraints aren't met.
+type RegisterUserRequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -103,24 +103,24 @@ type RegisterAccountRequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e RegisterAccountRequestValidationError) Field() string { return e.field }
+func (e RegisterUserRequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e RegisterAccountRequestValidationError) Reason() string { return e.reason }
+func (e RegisterUserRequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e RegisterAccountRequestValidationError) Cause() error { return e.cause }
+func (e RegisterUserRequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e RegisterAccountRequestValidationError) Key() bool { return e.key }
+func (e RegisterUserRequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e RegisterAccountRequestValidationError) ErrorName() string {
-	return "RegisterAccountRequestValidationError"
+func (e RegisterUserRequestValidationError) ErrorName() string {
+	return "RegisterUserRequestValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e RegisterAccountRequestValidationError) Error() string {
+func (e RegisterUserRequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -132,14 +132,14 @@ func (e RegisterAccountRequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sRegisterAccountRequest.%s: %s%s",
+		"invalid %sRegisterUserRequest.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = RegisterAccountRequestValidationError{}
+var _ error = RegisterUserRequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -147,24 +147,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = RegisterAccountRequestValidationError{}
+} = RegisterUserRequestValidationError{}
 
-// Validate checks the field values on RegisterAccountReply with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *RegisterAccountReply) Validate() error {
+// Validate checks the field values on RegisterUserReply with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *RegisterUserReply) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on RegisterAccountReply with the rules
+// ValidateAll checks the field values on RegisterUserReply with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// RegisterAccountReplyMultiError, or nil if none found.
-func (m *RegisterAccountReply) ValidateAll() error {
+// RegisterUserReplyMultiError, or nil if none found.
+func (m *RegisterUserReply) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *RegisterAccountReply) validate(all bool) error {
+func (m *RegisterUserReply) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -176,19 +176,19 @@ func (m *RegisterAccountReply) validate(all bool) error {
 	// no validation rules for Message
 
 	if len(errors) > 0 {
-		return RegisterAccountReplyMultiError(errors)
+		return RegisterUserReplyMultiError(errors)
 	}
 
 	return nil
 }
 
-// RegisterAccountReplyMultiError is an error wrapping multiple validation
-// errors returned by RegisterAccountReply.ValidateAll() if the designated
-// constraints aren't met.
-type RegisterAccountReplyMultiError []error
+// RegisterUserReplyMultiError is an error wrapping multiple validation errors
+// returned by RegisterUserReply.ValidateAll() if the designated constraints
+// aren't met.
+type RegisterUserReplyMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m RegisterAccountReplyMultiError) Error() string {
+func (m RegisterUserReplyMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -197,11 +197,11 @@ func (m RegisterAccountReplyMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m RegisterAccountReplyMultiError) AllErrors() []error { return m }
+func (m RegisterUserReplyMultiError) AllErrors() []error { return m }
 
-// RegisterAccountReplyValidationError is the validation error returned by
-// RegisterAccountReply.Validate if the designated constraints aren't met.
-type RegisterAccountReplyValidationError struct {
+// RegisterUserReplyValidationError is the validation error returned by
+// RegisterUserReply.Validate if the designated constraints aren't met.
+type RegisterUserReplyValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -209,24 +209,24 @@ type RegisterAccountReplyValidationError struct {
 }
 
 // Field function returns field value.
-func (e RegisterAccountReplyValidationError) Field() string { return e.field }
+func (e RegisterUserReplyValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e RegisterAccountReplyValidationError) Reason() string { return e.reason }
+func (e RegisterUserReplyValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e RegisterAccountReplyValidationError) Cause() error { return e.cause }
+func (e RegisterUserReplyValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e RegisterAccountReplyValidationError) Key() bool { return e.key }
+func (e RegisterUserReplyValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e RegisterAccountReplyValidationError) ErrorName() string {
-	return "RegisterAccountReplyValidationError"
+func (e RegisterUserReplyValidationError) ErrorName() string {
+	return "RegisterUserReplyValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e RegisterAccountReplyValidationError) Error() string {
+func (e RegisterUserReplyValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -238,14 +238,14 @@ func (e RegisterAccountReplyValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sRegisterAccountReply.%s: %s%s",
+		"invalid %sRegisterUserReply.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = RegisterAccountReplyValidationError{}
+var _ error = RegisterUserReplyValidationError{}
 
 var _ interface {
 	Field() string
@@ -253,7 +253,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = RegisterAccountReplyValidationError{}
+} = RegisterUserReplyValidationError{}
 
 // Validate checks the field values on LoginRequest with the rules defined in
 // the proto definition for this message. If any rules are violated, the first
@@ -512,7 +512,7 @@ func (m *LoginReply_Data) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for AccountId
+	// no validation rules for UserId
 
 	// no validation rules for Token
 

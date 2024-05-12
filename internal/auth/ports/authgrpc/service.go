@@ -1,4 +1,4 @@
-package grpc
+package authgrpc
 
 import (
 	"context"
@@ -16,8 +16,8 @@ type Service struct {
 }
 
 type Application struct {
-	RegisterAccount app.RegisterAccountHandler
-	LoginAccount    app.LoginHandler
+	RegisterUser app.RegisterUserHandler
+	LoginUser    app.LoginHandler
 }
 
 func NewAuthService(app Application) Service {
@@ -30,9 +30,9 @@ func (s Service) RegisterService(grpcServiceRegistrar grpc.ServiceRegistrar) {
 	auth.RegisterAuthServer(grpcServiceRegistrar, s)
 }
 
-func (s Service) RegisterAccount(ctx context.Context,
-	req *auth.RegisterAccountRequest) (*auth.RegisterAccountReply, error) {
-	err := s.App.RegisterAccount.Handle(ctx, app.RegisterAccountRequest{
+func (s Service) RegisterUser(ctx context.Context,
+	req *auth.RegisterUserRequest) (*auth.RegisterUserReply, error) {
+	err := s.App.RegisterUser.Handle(ctx, app.RegisterUserRequest{
 		Username:    req.Username,
 		PhoneNumber: req.PhoneNumber,
 		Email:       req.Email,
@@ -43,7 +43,7 @@ func (s Service) RegisterAccount(ctx context.Context,
 	if err != nil {
 		return nil, err
 	}
-	return &auth.RegisterAccountReply{
+	return &auth.RegisterUserReply{
 		Code:    utils.CodeSuccess,
 		Message: utils.MessageSuccess,
 	}, nil
@@ -51,7 +51,7 @@ func (s Service) RegisterAccount(ctx context.Context,
 
 func (s Service) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginReply, error) {
 	logger := logging.FromContext(ctx).With("identity", req.Identity)
-	resp, err := s.App.LoginAccount.Handle(ctx, app.LoginRequest{
+	resp, err := s.App.LoginUser.Handle(ctx, app.LoginRequest{
 		Identity: req.Identity,
 		Password: req.Password,
 	})
@@ -63,8 +63,8 @@ func (s Service) Login(ctx context.Context, req *auth.LoginRequest) (*auth.Login
 		Code:    utils.CodeSuccess,
 		Message: utils.MessageSuccess,
 		Data: &auth.LoginReply_Data{
-			AccountId: resp.AccountId,
-			Token:     resp.Token,
+			UserId: resp.UserId,
+			Token:  resp.Token,
 		},
 	}, nil
 }

@@ -31,12 +31,12 @@ paths:
         - Auth
   /api/app/v1/auth/register:
     post:
-      operationId: Auth_RegisterAccount
+      operationId: Auth_RegisterUser
       responses:
         "200":
           description: A successful response.
           schema:
-            $ref: '#/definitions/authRegisterAccountReply'
+            $ref: '#/definitions/authRegisterUserReply'
         default:
           description: An unexpected error response.
           schema:
@@ -46,14 +46,14 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/authRegisterAccountRequest'
+            $ref: '#/definitions/authRegisterUserRequest'
       tags:
         - Auth
 definitions:
   LoginReplyData:
     type: object
     properties:
-      accountId:
+      userId:
         type: string
         format: int64
       token:
@@ -75,7 +75,7 @@ definitions:
         type: string
       password:
         type: string
-  authRegisterAccountReply:
+  authRegisterUserReply:
     type: object
     properties:
       code:
@@ -83,7 +83,7 @@ definitions:
         format: int32
       message:
         type: string
-  authRegisterAccountRequest:
+  authRegisterUserRequest:
     type: object
     properties:
       fullName:

@@ -29,26 +29,6 @@ paths:
             $ref: '#/definitions/adminDefineCampaignRequest'
       tags:
         - PromotionAdmin
-  /api/app/v1/promotion-admin/campaigns/voucher/set:
-    post:
-      operationId: PromotionAdmin_SetVoucherToCampaign
-      responses:
-        "200":
-          description: A successful response.
-          schema:
-            $ref: '#/definitions/adminSetVoucherToCampaignReply'
-        default:
-          description: An unexpected error response.
-          schema:
-            $ref: '#/definitions/rpcStatus'
-      parameters:
-        - name: body
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/adminSetVoucherToCampaignRequest'
-      tags:
-        - PromotionAdmin
   /api/app/v1/promotion-admin/voucher/define:
     post:
       operationId: PromotionAdmin_DefineVoucher
@@ -70,15 +50,17 @@ paths:
       tags:
         - PromotionAdmin
 definitions:
-  SetVoucherToCampaignRequestVoucher:
+  adminCampaignMetadata:
     type: object
     properties:
-      voucherId:
+      startAt:
         type: string
-        format: int64
-      amount:
+        format: date-time
+      endAt:
         type: string
-        format: int64
+        format: date-time
+      strategy:
+        $ref: '#/definitions/adminStrategy'
   adminDefineCampaignReply:
     type: object
     properties:
@@ -94,6 +76,8 @@ definitions:
         type: string
       name:
         type: string
+      metadata:
+        $ref: '#/definitions/adminCampaignMetadata'
   adminDefineVoucherReply:
     type: object
     properties:
@@ -116,25 +100,35 @@ definitions:
       appId:
         type: string
         title: '* will be all app_id'
-  adminSetVoucherToCampaignReply:
+  adminStrategy:
     type: object
     properties:
-      code:
-        type: integer
-        format: int32
-      message:
-        type: string
-  adminSetVoucherToCampaignRequest:
+      strategyTopRegister:
+        $ref: '#/definitions/adminStrategyDetailTopRegister'
+      strategySpending:
+        $ref: '#/definitions/adminStrategyDetailSpending'
+  adminStrategyDetailSpending:
+    type: object
+  adminStrategyDetailTopRegister:
     type: object
     properties:
-      campaignId:
-        type: string
-        format: int64
       vouchers:
         type: array
         items:
           type: object
-          $ref: '#/definitions/SetVoucherToCampaignRequestVoucher'
+          $ref: '#/definitions/adminVoucher'
+      topUsers:
+        type: string
+        format: int64
+  adminVoucher:
+    type: object
+    properties:
+      id:
+        type: string
+        format: int64
+      totalVouchers:
+        type: string
+        format: int64
   protobufAny:
     type: object
     properties:

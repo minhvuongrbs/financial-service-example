@@ -10,10 +10,10 @@ import (
 )
 
 type Querier interface {
-	CreateAccount(ctx context.Context, arg *CreateAccountParams) (sql.Result, error)
-	GetAccountByEmail(ctx context.Context, email sql.NullString) (*Account, error)
-	GetAccountByPhoneNumber(ctx context.Context, phoneNumber sql.NullString) (*Account, error)
-	GetAccountByUsername(ctx context.Context, username sql.NullString) (*Account, error)
+	CreateUser(ctx context.Context, arg *CreateUserParams) (sql.Result, error)
+	GetUserByUsernameEmail(ctx context.Context, email sql.NullString) (*User, error)
+	GetUserByUsernamePhoneNumber(ctx context.Context, phoneNumber sql.NullString) (*User, error)
+	GetUserByUsernameUsername(ctx context.Context, username sql.NullString) (*User, error)
 }
 
 var _ Querier = (*Queries)(nil)

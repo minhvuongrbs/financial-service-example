@@ -10,9 +10,10 @@ import (
 	"time"
 )
 
-type Account struct {
-	ID          int64          `json:"id"`
-	Username    sql.NullString `json:"username"`
+type User struct {
+	ID       int64          `json:"id"`
+	Username sql.NullString `json:"username"`
+	// format 84914123423
 	PhoneNumber sql.NullString `json:"phone_number"`
 	Email       sql.NullString `json:"email"`
 	// birthday,...

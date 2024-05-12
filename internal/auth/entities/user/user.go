@@ -1,11 +1,11 @@
-package account
+package user
 
 import (
 	"fmt"
 	"time"
 )
 
-type Account struct {
+type User struct {
 	Id int64 `json:"id"`
 
 	Username    string `json:"username"`
@@ -22,12 +22,12 @@ type PersonalInfo struct {
 	BirthDay time.Time `json:"birth_day"`
 }
 
-func NewAccount(username string, phone int64, email string,
-	birthday string, fullName string, password string) (a *Account, err error) {
-	if isValidFullName(fullName) {
+func NewUser(username string, phone int64, email string,
+	birthday string, fullName string, password string) (a *User, err error) {
+	if !isValidFullName(fullName) {
 		return nil, fmt.Errorf("invalid fullname")
 	}
-	if IsValidPassword(password) {
+	if !IsValidPassword(password) {
 		return nil, fmt.Errorf("invalid password")
 	}
 
@@ -37,10 +37,10 @@ func NewAccount(username string, phone int64, email string,
 	if username != "" && !isValidUsername(username) {
 		return nil, fmt.Errorf("invalid user name")
 	}
-	if phone != 0 && isValidVNPhone(phone) {
+	if phone != 0 && !isValidVNPhone(phone) {
 		return nil, fmt.Errorf("invalid VN phone")
 	}
-	if email != "" && isValidEmail(email) {
+	if email != "" && !isValidEmail(email) {
 		return nil, fmt.Errorf("invalid email")
 	}
 
@@ -57,7 +57,7 @@ func NewAccount(username string, phone int64, email string,
 		return nil, fmt.Errorf("hash password: %w", err)
 	}
 
-	return &Account{
+	return &User{
 		Id:          0,
 		Username:    username,
 		PhoneNumber: phone,
@@ -70,6 +70,6 @@ func NewAccount(username string, phone int64, email string,
 	}, nil
 }
 
-func (a *Account) WithId(accountId int64) {
-	a.Id = accountId
+func (a *User) WithId(userId int64) {
+	a.Id = userId
 }

@@ -24,47 +24,31 @@ func New(db DBTX) *Queries {
 func Prepare(ctx context.Context, db DBTX) (*Queries, error) {
 	q := Queries{db: db}
 	var err error
-	if q.createAccountVoucherStmt, err = db.PrepareContext(ctx, createAccountVoucher); err != nil {
-		return nil, fmt.Errorf("error preparing query CreateAccountVoucher: %w", err)
+	if q.createVoucherUserStmt, err = db.PrepareContext(ctx, createVoucherUser); err != nil {
+		return nil, fmt.Errorf("error preparing query CreateVoucherUser: %w", err)
 	}
-	if q.getCampaignAccountByCampaignIdStmt, err = db.PrepareContext(ctx, getCampaignAccountByCampaignId); err != nil {
-		return nil, fmt.Errorf("error preparing query GetCampaignAccountByCampaignId: %w", err)
-	}
-	if q.getCampaignByKeyStmt, err = db.PrepareContext(ctx, getCampaignByKey); err != nil {
-		return nil, fmt.Errorf("error preparing query GetCampaignByKey: %w", err)
-	}
-	if q.insertCampaignStmt, err = db.PrepareContext(ctx, insertCampaign); err != nil {
-		return nil, fmt.Errorf("error preparing query InsertCampaign: %w", err)
+	if q.getCampaignByIdStmt, err = db.PrepareContext(ctx, getCampaignById); err != nil {
+		return nil, fmt.Errorf("error preparing query GetCampaignById: %w", err)
 	}
 	if q.insertVoucherStmt, err = db.PrepareContext(ctx, insertVoucher); err != nil {
 		return nil, fmt.Errorf("error preparing query InsertVoucher: %w", err)
 	}
-	if q.updateCampaignByIdStmt, err = db.PrepareContext(ctx, updateCampaignById); err != nil {
-		return nil, fmt.Errorf("error preparing query UpdateCampaignById: %w", err)
+	if q.updateCampaignStmt, err = db.PrepareContext(ctx, updateCampaign); err != nil {
+		return nil, fmt.Errorf("error preparing query UpdateCampaign: %w", err)
 	}
 	return &q, nil
 }
 
 func (q *Queries) Close() error {
 	var err error
-	if q.createAccountVoucherStmt != nil {
-		if cerr := q.createAccountVoucherStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing createAccountVoucherStmt: %w", cerr)
+	if q.createVoucherUserStmt != nil {
+		if cerr := q.createVoucherUserStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing createVoucherUserStmt: %w", cerr)
 		}
 	}
-	if q.getCampaignAccountByCampaignIdStmt != nil {
-		if cerr := q.getCampaignAccountByCampaignIdStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getCampaignAccountByCampaignIdStmt: %w", cerr)
-		}
-	}
-	if q.getCampaignByKeyStmt != nil {
-		if cerr := q.getCampaignByKeyStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing getCampaignByKeyStmt: %w", cerr)
-		}
-	}
-	if q.insertCampaignStmt != nil {
-		if cerr := q.insertCampaignStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing insertCampaignStmt: %w", cerr)
+	if q.getCampaignByIdStmt != nil {
+		if cerr := q.getCampaignByIdStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing getCampaignByIdStmt: %w", cerr)
 		}
 	}
 	if q.insertVoucherStmt != nil {
@@ -72,9 +56,9 @@ func (q *Queries) Close() error {
 			err = fmt.Errorf("error closing insertVoucherStmt: %w", cerr)
 		}
 	}
-	if q.updateCampaignByIdStmt != nil {
-		if cerr := q.updateCampaignByIdStmt.Close(); cerr != nil {
-			err = fmt.Errorf("error closing updateCampaignByIdStmt: %w", cerr)
+	if q.updateCampaignStmt != nil {
+		if cerr := q.updateCampaignStmt.Close(); cerr != nil {
+			err = fmt.Errorf("error closing updateCampaignStmt: %w", cerr)
 		}
 	}
 	return err
@@ -114,25 +98,21 @@ func (q *Queries) queryRow(ctx context.Context, stmt *sql.Stmt, query string, ar
 }
 
 type Queries struct {
-	db                                 DBTX
-	tx                                 *sql.Tx
-	createAccountVoucherStmt           *sql.Stmt
-	getCampaignAccountByCampaignIdStmt *sql.Stmt
-	getCampaignByKeyStmt               *sql.Stmt
-	insertCampaignStmt                 *sql.Stmt
-	insertVoucherStmt                  *sql.Stmt
-	updateCampaignByIdStmt             *sql.Stmt
+	db                    DBTX
+	tx                    *sql.Tx
+	createVoucherUserStmt *sql.Stmt
+	getCampaignByIdStmt   *sql.Stmt
+	insertVoucherStmt     *sql.Stmt
+	updateCampaignStmt    *sql.Stmt
 }
 
 func (q *Queries) WithTx(tx *sql.Tx) *Queries {
 	return &Queries{
-		db:                                 tx,
-		tx:                                 tx,
-		createAccountVoucherStmt:           q.createAccountVoucherStmt,
-		getCampaignAccountByCampaignIdStmt: q.getCampaignAccountByCampaignIdStmt,
-		getCampaignByKeyStmt:               q.getCampaignByKeyStmt,
-		insertCampaignStmt:                 q.insertCampaignStmt,
-		insertVoucherStmt:                  q.insertVoucherStmt,
-		updateCampaignByIdStmt:             q.updateCampaignByIdStmt,
+		db:                    tx,
+		tx:                    tx,
+		createVoucherUserStmt: q.createVoucherUserStmt,
+		getCampaignByIdStmt:   q.getCampaignByIdStmt,
+		insertVoucherStmt:     q.insertVoucherStmt,
+		updateCampaignStmt:    q.updateCampaignStmt,
 	}
 }

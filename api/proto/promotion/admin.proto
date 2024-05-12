@@ -6,7 +6,7 @@ option go_package = "github.com/minhvuongrbs/financial-service-example";
 import "validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/rpc/error_details.proto";
-
+import "google/protobuf/timestamp.proto";
 import "protoc-gen-swagger/options/annotations.proto";
 
 service PromotionAdmin {
@@ -23,27 +23,6 @@ service PromotionAdmin {
       body: "*"
     };
   };
-
-  rpc SetVoucherToCampaign (SetVoucherToCampaignRequest) returns (SetVoucherToCampaignReply){
-    option (google.api.http) = {
-      post: "/api/app/v1/promotion-admin/campaigns/voucher/set"
-      body: "*"
-    };
-  };
-}
-
-message SetVoucherToCampaignRequest {
-  int64 campaign_id = 1;
-  message Voucher {
-    int64 voucher_id = 1;
-    int64 amount = 2;
-  }
-  repeated Voucher vouchers = 2;
-}
-
-message SetVoucherToCampaignReply {
-  int32 code = 1;
-  string message = 2;
 }
 
 message DefineVoucherRequest {
@@ -58,9 +37,36 @@ message DefineVoucherReply {
   string message = 2;
 }
 
+
 message DefineCampaignRequest {
   string campaign_key = 1;
   string name = 2;
+  CampaignMetadata metadata = 3;
+}
+
+message CampaignMetadata {
+  google.protobuf.Timestamp start_at = 3;
+  google.protobuf.Timestamp end_at = 4;
+  Strategy strategy = 5;
+}
+
+message Strategy {
+  oneof metadata {
+    StrategyDetailTopRegister strategy_top_register = 2;
+    StrategyDetailSpending strategy_spending = 3;
+  }
+}
+
+message StrategyDetailTopRegister {
+    repeated Voucher vouchers = 1;
+    int64 top_users = 2;
+}
+
+message StrategyDetailSpending {}
+
+message Voucher {
+  int64 id = 1;
+  int64 total_vouchers = 2;
 }
 
 message DefineCampaignReply {

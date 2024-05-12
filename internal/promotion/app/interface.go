@@ -7,5 +7,5 @@ import (
 )
 
 type campaignRepo interface {
-	CreateCampaign(ctx context.Context, c *campaign.Campaign) error
+	DefineCampaign(ctx context.Context, c *campaign.Campaign) error
 }

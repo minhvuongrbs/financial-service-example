@@ -1,11 +1,11 @@
-package account_token
+package user_token
 
 import (
 	"encoding/json"
 	"fmt"
 	"time"
 
-	"github.com/minhvuongrbs/financial-service-example/internal/auth/entities/account"
+	"github.com/minhvuongrbs/financial-service-example/internal/auth/entities/user"
 	"github.com/minhvuongrbs/financial-service-example/pkg/jwt"
 )
 
@@ -38,7 +38,7 @@ func NewJWTToken(cfg Config) (JWTToken, error) {
 	}, nil
 }
 
-func (j JWTToken) GenerateToken(m account.TokenData) (string, error) {
+func (j JWTToken) GenerateToken(m user.TokenData) (string, error) {
 	m.GeneratedAt = time.Now().UnixMilli()
 	m.ExpiredAt = time.Now().Add(j.tokenDuration).UnixMilli()
 
@@ -47,7 +47,7 @@ func (j JWTToken) GenerateToken(m account.TokenData) (string, error) {
 		return "", fmt.Errorf("marshal user authenticate data: %w", err)
 	}
 	tokenData := map[string]interface{}{}
-	if err := json.Unmarshal(bs, &tokenData); err != nil {
+	if err = json.Unmarshal(bs, &tokenData); err != nil {
 		return "", fmt.Errorf("unmarshal user authenticate data: %w", err)
 	}
 	token, err := j.generator.GenerateToken(tokenData)
@@ -57,18 +57,18 @@ func (j JWTToken) GenerateToken(m account.TokenData) (string, error) {
 	return token, nil
 }
 
-func (j JWTToken) ValidateToken(token string) (account.TokenData, error) {
+func (j JWTToken) ValidateToken(token string) (user.TokenData, error) {
 	tokenData, err := j.validator.ValidateToken(token)
 	if err != nil {
-		return account.TokenData{}, fmt.Errorf("validate token: %w", err)
+		return user.TokenData{}, fmt.Errorf("validate token: %w", err)
 	}
 	bs, err := json.Marshal(tokenData)
 	if err != nil {
-		return account.TokenData{}, fmt.Errorf("marshal token data: %w", err)
+		return user.TokenData{}, fmt.Errorf("marshal token data: %w", err)
 	}
-	var u account.TokenData
+	var u user.TokenData
 	if err := json.Unmarshal(bs, &u); err != nil {
-		return account.TokenData{}, fmt.Errorf("unmarshal token data: %w", err)
+		return user.TokenData{}, fmt.Errorf("unmarshal token data: %w", err)
 	}
 	return u, nil
 }

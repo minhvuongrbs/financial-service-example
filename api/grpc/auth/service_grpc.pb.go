@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Auth_RegisterAccount_FullMethodName = "/auth.Auth/RegisterAccount"
-	Auth_Login_FullMethodName           = "/auth.Auth/Login"
+	Auth_RegisterUser_FullMethodName = "/auth.Auth/RegisterUser"
+	Auth_Login_FullMethodName        = "/auth.Auth/Login"
 )
 
 // AuthClient is the client API for Auth service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
-	RegisterAccount(ctx context.Context, in *RegisterAccountRequest, opts ...grpc.CallOption) (*RegisterAccountReply, error)
+	RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserReply, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginReply, error)
 }
 
@@ -39,9 +39,9 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
 }
 
-func (c *authClient) RegisterAccount(ctx context.Context, in *RegisterAccountRequest, opts ...grpc.CallOption) (*RegisterAccountReply, error) {
-	out := new(RegisterAccountReply)
-	err := c.cc.Invoke(ctx, Auth_RegisterAccount_FullMethodName, in, out, opts...)
+func (c *authClient) RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserReply, error) {
+	out := new(RegisterUserReply)
+	err := c.cc.Invoke(ctx, Auth_RegisterUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (c *authClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.C
 // All implementations must embed UnimplementedAuthServer
 // for forward compatibility
 type AuthServer interface {
-	RegisterAccount(context.Context, *RegisterAccountRequest) (*RegisterAccountReply, error)
+	RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserReply, error)
 	Login(context.Context, *LoginRequest) (*LoginReply, error)
 	mustEmbedUnimplementedAuthServer()
 }
@@ -70,8 +70,8 @@ type AuthServer interface {
 type UnimplementedAuthServer struct {
 }
 
-func (UnimplementedAuthServer) RegisterAccount(context.Context, *RegisterAccountRequest) (*RegisterAccountReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RegisterAccount not implemented")
+func (UnimplementedAuthServer) RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterUser not implemented")
 }
 func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
@@ -89,20 +89,20 @@ func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 	s.RegisterService(&Auth_ServiceDesc, srv)
 }
 
-func _Auth_RegisterAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RegisterAccountRequest)
+func _Auth_RegisterUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServer).RegisterAccount(ctx, in)
+		return srv.(AuthServer).RegisterUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Auth_RegisterAccount_FullMethodName,
+		FullMethod: Auth_RegisterUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).RegisterAccount(ctx, req.(*RegisterAccountRequest))
+		return srv.(AuthServer).RegisterUser(ctx, req.(*RegisterUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -133,8 +133,8 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "RegisterAccount",
-			Handler:    _Auth_RegisterAccount_Handler,
+			MethodName: "RegisterUser",
+			Handler:    _Auth_RegisterUser_Handler,
 		},
 		{
 			MethodName: "Login",

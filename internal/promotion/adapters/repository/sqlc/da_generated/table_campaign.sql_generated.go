@@ -7,77 +7,53 @@ package da_generated
 
 import (
 	"context"
-	"time"
+	"encoding/json"
 )
 
-const getCampaignByKey = `-- name: GetCampaignByKey :one
-select id, campaign_key, status, name, start_at, end_at, created_at, updated_at
-from campaign where campaign_key = ?
+const getCampaignById = `-- name: GetCampaignById :one
+select id, status, name, metadata, created_at, updated_at
+from campaign where id = ?
 `
 
-func (q *Queries) GetCampaignByKey(ctx context.Context, campaignKey string) (*Campaign, error) {
-	row := q.queryRow(ctx, q.getCampaignByKeyStmt, getCampaignByKey, campaignKey)
+func (q *Queries) GetCampaignById(ctx context.Context, id int64) (*Campaign, error) {
+	row := q.queryRow(ctx, q.getCampaignByIdStmt, getCampaignById, id)
 	var i Campaign
 	err := row.Scan(
 		&i.ID,
-		&i.CampaignKey,
 		&i.Status,
 		&i.Name,
-		&i.StartAt,
-		&i.EndAt,
+		&i.Metadata,
 		&i.CreatedAt,
 		&i.UpdatedAt,
 	)
 	return &i, err
 }
 
-const insertCampaign = `-- name: InsertCampaign :execrows
-insert into campaign (campaign_key, status, name, start_at, end_at)
-VALUES (?, ?, ?, ?, ?)
+const updateCampaign = `-- name: UpdateCampaign :execrows
+insert into campaign (id, status, name, metadata)
+VALUES (?, ?, ?,?)
+ON DUPLICATE KEY UPDATE
+    status = ?,
+    name = ?,
+    metadata = ?
 `
 
-type InsertCampaignParams struct {
-	CampaignKey string         `json:"campaign_key"`
-	Status      CampaignStatus `json:"status"`
-	Name        string         `json:"name"`
-	StartAt     time.Time      `json:"start_at"`
-	EndAt       time.Time      `json:"end_at"`
+type UpdateCampaignParams struct {
+	ID       int64           `json:"id"`
+	Status   CampaignStatus  `json:"status"`
+	Name     string          `json:"name"`
+	Metadata json.RawMessage `json:"metadata"`
 }
 
-func (q *Queries) InsertCampaign(ctx context.Context, arg *InsertCampaignParams) (int64, error) {
-	result, err := q.exec(ctx, q.insertCampaignStmt, insertCampaign,
-		arg.CampaignKey,
-		arg.Status,
-		arg.Name,
-		arg.StartAt,
-		arg.EndAt,
-	)
-	if err != nil {
-		return 0, err
-	}
-	return result.RowsAffected()
-}
-
-const updateCampaignById = `-- name: UpdateCampaignById :execrows
-update campaign set status = ? and name = ? and start_at = ? and end_at = ?
-where id = ?
-`
-
-type UpdateCampaignByIdParams struct {
-	Status  CampaignStatus `json:"status"`
-	Name    string         `json:"name"`
-	StartAt time.Time      `json:"start_at"`
-	EndAt   time.Time      `json:"end_at"`
-	ID      int64          `json:"id"`
-}
-
-func (q *Queries) UpdateCampaignById(ctx context.Context, arg *UpdateCampaignByIdParams) (int64, error) {
-	result, err := q.exec(ctx, q.updateCampaignByIdStmt, updateCampaignById,
-		arg.Status,
-		arg.Name,
-		arg.StartAt,
-		arg.EndAt,
+func (q *Queries) UpdateCampaign(ctx context.Context, arg *UpdateCampaignParams) (int64, error) {
+	result, err := q.exec(ctx, q.updateCampaignStmt, updateCampaign,
 		arg.ID,
+		arg.Status,
+		arg.Name,
+		arg.Metadata,
+		arg.Status,
+		arg.Name,
+		arg.Metadata,
 	)
 	if err != nil {
 		return 0, err

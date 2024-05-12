@@ -19,9 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	PromotionAdmin_DefineCampaign_FullMethodName       = "/promotion.admin.PromotionAdmin/DefineCampaign"
-	PromotionAdmin_DefineVoucher_FullMethodName        = "/promotion.admin.PromotionAdmin/DefineVoucher"
-	PromotionAdmin_SetVoucherToCampaign_FullMethodName = "/promotion.admin.PromotionAdmin/SetVoucherToCampaign"
+	PromotionAdmin_DefineCampaign_FullMethodName = "/promotion.admin.PromotionAdmin/DefineCampaign"
+	PromotionAdmin_DefineVoucher_FullMethodName  = "/promotion.admin.PromotionAdmin/DefineVoucher"
 )
 
 // PromotionAdminClient is the client API for PromotionAdmin service.
@@ -30,7 +29,6 @@ const (
 type PromotionAdminClient interface {
 	DefineCampaign(ctx context.Context, in *DefineCampaignRequest, opts ...grpc.CallOption) (*DefineCampaignReply, error)
 	DefineVoucher(ctx context.Context, in *DefineVoucherRequest, opts ...grpc.CallOption) (*DefineVoucherReply, error)
-	SetVoucherToCampaign(ctx context.Context, in *SetVoucherToCampaignRequest, opts ...grpc.CallOption) (*SetVoucherToCampaignReply, error)
 }
 
 type promotionAdminClient struct {
@@ -59,22 +57,12 @@ func (c *promotionAdminClient) DefineVoucher(ctx context.Context, in *DefineVouc
 	return out, nil
 }
 
-func (c *promotionAdminClient) SetVoucherToCampaign(ctx context.Context, in *SetVoucherToCampaignRequest, opts ...grpc.CallOption) (*SetVoucherToCampaignReply, error) {
-	out := new(SetVoucherToCampaignReply)
-	err := c.cc.Invoke(ctx, PromotionAdmin_SetVoucherToCampaign_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // PromotionAdminServer is the server API for PromotionAdmin service.
 // All implementations must embed UnimplementedPromotionAdminServer
 // for forward compatibility
 type PromotionAdminServer interface {
 	DefineCampaign(context.Context, *DefineCampaignRequest) (*DefineCampaignReply, error)
 	DefineVoucher(context.Context, *DefineVoucherRequest) (*DefineVoucherReply, error)
-	SetVoucherToCampaign(context.Context, *SetVoucherToCampaignRequest) (*SetVoucherToCampaignReply, error)
 	mustEmbedUnimplementedPromotionAdminServer()
 }
 
@@ -87,9 +75,6 @@ func (UnimplementedPromotionAdminServer) DefineCampaign(context.Context, *Define
 }
 func (UnimplementedPromotionAdminServer) DefineVoucher(context.Context, *DefineVoucherRequest) (*DefineVoucherReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DefineVoucher not implemented")
-}
-func (UnimplementedPromotionAdminServer) SetVoucherToCampaign(context.Context, *SetVoucherToCampaignRequest) (*SetVoucherToCampaignReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetVoucherToCampaign not implemented")
 }
 func (UnimplementedPromotionAdminServer) mustEmbedUnimplementedPromotionAdminServer() {}
 
@@ -140,24 +125,6 @@ func _PromotionAdmin_DefineVoucher_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PromotionAdmin_SetVoucherToCampaign_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetVoucherToCampaignRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PromotionAdminServer).SetVoucherToCampaign(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: PromotionAdmin_SetVoucherToCampaign_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PromotionAdminServer).SetVoucherToCampaign(ctx, req.(*SetVoucherToCampaignRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // PromotionAdmin_ServiceDesc is the grpc.ServiceDesc for PromotionAdmin service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -172,10 +139,6 @@ var PromotionAdmin_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DefineVoucher",
 			Handler:    _PromotionAdmin_DefineVoucher_Handler,
-		},
-		{
-			MethodName: "SetVoucherToCampaign",
-			Handler:    _PromotionAdmin_SetVoucherToCampaign_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

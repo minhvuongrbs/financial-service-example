@@ -6,6 +6,8 @@ CREATE TABLE voucher
     is_active       BOOL           NOT NULL DEFAULT FALSE,
     expiration_time DATETIME       NOT NULL,
     app_id          VARCHAR(255)   NOT NULL COMMENT '* will apply to all app_id',
+    title           VARCHAR(1000)  NOT NULL,
+    description     VARCHAR(1000)  NOT NULL DEFAULT '',
     created_at      TIMESTAMP               DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP               DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

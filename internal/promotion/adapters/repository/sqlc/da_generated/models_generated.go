@@ -7,6 +7,7 @@ package da_generated
 import (
 	"database/sql"
 	"database/sql/driver"
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -95,41 +96,22 @@ func (ns NullVoucherVoucherType) Value() (driver.Value, error) {
 	return string(ns.VoucherVoucherType), nil
 }
 
-type AccountVoucher struct {
-	ID        int64        `json:"id"`
-	AccountID int64        `json:"account_id"`
-	VoucherID int64        `json:"voucher_id"`
-	IsActive  bool         `json:"is_active"`
-	CreatedAt sql.NullTime `json:"created_at"`
-	UpdatedAt sql.NullTime `json:"updated_at"`
-}
-
 type Campaign struct {
-	ID          int64          `json:"id"`
-	CampaignKey string         `json:"campaign_key"`
-	Status      CampaignStatus `json:"status"`
-	Name        string         `json:"name"`
-	StartAt     time.Time      `json:"start_at"`
-	EndAt       time.Time      `json:"end_at"`
-	CreatedAt   sql.NullTime   `json:"created_at"`
-	UpdatedAt   sql.NullTime   `json:"updated_at"`
+	ID     int64          `json:"id"`
+	Status CampaignStatus `json:"status"`
+	Name   string         `json:"name"`
+	// metadata of campaign
+	Metadata  json.RawMessage `json:"metadata"`
+	CreatedAt sql.NullTime    `json:"created_at"`
+	UpdatedAt sql.NullTime    `json:"updated_at"`
 }
 
-type CampaignAccount struct {
+type CampaignUser struct {
 	ID         int64        `json:"id"`
-	AccountID  int64        `json:"account_id"`
+	UserID     int64        `json:"user_id"`
 	CampaignID int64        `json:"campaign_id"`
 	CreatedAt  sql.NullTime `json:"created_at"`
 	UpdatedAt  sql.NullTime `json:"updated_at"`
-}
-
-type CampaignVoucher struct {
-	ID            int64        `json:"id"`
-	CampaignID    int64        `json:"campaign_id"`
-	VoucherID     int64        `json:"voucher_id"`
-	TotalVouchers int32        `json:"total_vouchers"`
-	CreatedAt     sql.NullTime `json:"created_at"`
-	UpdatedAt     sql.NullTime `json:"updated_at"`
 }
 
 type Voucher struct {
@@ -139,7 +121,18 @@ type Voucher struct {
 	IsActive       bool               `json:"is_active"`
 	ExpirationTime time.Time          `json:"expiration_time"`
 	// * will apply to all app_id
-	AppID     string       `json:"app_id"`
+	AppID       string       `json:"app_id"`
+	Title       string       `json:"title"`
+	Description string       `json:"description"`
+	CreatedAt   sql.NullTime `json:"created_at"`
+	UpdatedAt   sql.NullTime `json:"updated_at"`
+}
+
+type VoucherUser struct {
+	ID        int64        `json:"id"`
+	VoucherID int64        `json:"voucher_id"`
+	UserID    int64        `json:"user_id"`
+	IsActive  bool         `json:"is_active"`
 	CreatedAt sql.NullTime `json:"created_at"`
 	UpdatedAt sql.NullTime `json:"updated_at"`
 }

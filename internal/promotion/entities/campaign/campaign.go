@@ -1,6 +1,9 @@
 package campaign
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Status int
 
@@ -13,25 +16,31 @@ const (
 type Campaign struct {
 	Id int64
 
-	Key  string
-	Name string
-
+	Name   string
 	Status Status
 
-	StartAt time.Time
-	EndAt   time.Time
+	Metadata Metadata
 
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func NewCampaign(key, name string, status Status, startAt, endAt time.Time) (*Campaign, error) {
+const (
+	minNameLength = 5
+)
+
+func NewCampaign(id int64, name string, status Status, md Metadata) (*Campaign, error) {
+	if len(name) < minNameLength {
+		return nil, fmt.Errorf("invalid name length")
+	}
+	if status == StatusUnknown {
+		return nil, fmt.Errorf("invalid status: %v", status)
+	}
+
 	return &Campaign{
-		Id:      0,
-		Key:     key,
-		Name:    name,
-		Status:  status,
-		StartAt: startAt,
-		EndAt:   endAt,
+		Id:       id,
+		Name:     name,
+		Status:   status,
+		Metadata: md,
 	}, nil
 }

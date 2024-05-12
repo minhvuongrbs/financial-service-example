@@ -1,4 +1,4 @@
-CREATE TABLE `account`
+CREATE TABLE `user`
 (
     id            BIGINT                              NOT NULL AUTO_INCREMENT,
     username      VARCHAR(255) NULL UNIQUE,
@@ -9,24 +9,24 @@ CREATE TABLE `account`
     password      VARCHAR(255)                        NOT NULL COMMENT 'hashed password',
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY pk__account (id)
+    PRIMARY KEY pk__user (id)
 );
 
--- name: CreateAccount :execresult
-insert into account(username, phone_number, email, personal_info, full_name, password)
+-- name: CreateUser :execresult
+insert into user(username, phone_number, email, personal_info, full_name, password)
 values (?, ?, ?, ?, ?, ?);
 
--- name: GetAccountByUsername :one
+-- name: GetUserByUsernameUsername :one
 select *
-from account
+from user
 where username = ?;
 
--- name: GetAccountByPhoneNumber :one
+-- name: GetUserByUsernamePhoneNumber :one
 select *
-from account
+from user
 where phone_number = ?;
 
--- name: GetAccountByEmail :one
+-- name: GetUserByUsernameEmail :one
 select *
-from account
+from user
 where email = ?;

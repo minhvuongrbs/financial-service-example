@@ -1,7 +1,7 @@
-package account
+package user
 
 type TokenData struct {
-	AccountId int64 `json:"account_id"`
+	UserId int64 `json:"user_id"`
 
 	UserName    string `json:"user_name"`
 	Email       string `json:"email"`
