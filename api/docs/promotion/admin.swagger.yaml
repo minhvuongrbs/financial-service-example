@@ -104,12 +104,12 @@ definitions:
     type: object
     properties:
       strategyTopRegister:
-        $ref: '#/definitions/adminStrategyDetailTopRegister'
+        $ref: '#/definitions/adminStrategyTopRegister'
       strategySpending:
-        $ref: '#/definitions/adminStrategyDetailSpending'
-  adminStrategyDetailSpending:
+        $ref: '#/definitions/adminStrategySpending'
+  adminStrategySpending:
     type: object
-  adminStrategyDetailTopRegister:
+  adminStrategyTopRegister:
     type: object
     properties:
       vouchers:

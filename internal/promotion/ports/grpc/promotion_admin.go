@@ -46,7 +46,7 @@ func convertCampaignMetadata(req *promotion.DefineCampaignRequest) (entitycampai
 		for _, voucher := range v.StrategyTopRegister.Vouchers {
 			vouchers = append(vouchers, entitycampaign.NewVoucher(voucher.Id, voucher.TotalVouchers))
 		}
-		strategy = entitycampaign.NewStrategy(entitycampaign.NewStrategyDetailTopRegister(v.StrategyTopRegister.TopUsers, vouchers))
+		strategy = entitycampaign.NewStrategyTopRegister(v.StrategyTopRegister.TopUsers, vouchers)
 	default:
 		return entitycampaign.Metadata{}, fmt.Errorf("invalid campaign strategy: %v", v)
 	}

@@ -45,24 +45,24 @@ message DefineCampaignRequest {
 }
 
 message CampaignMetadata {
-  google.protobuf.Timestamp start_at = 3;
-  google.protobuf.Timestamp end_at = 4;
-  Strategy strategy = 5;
+  google.protobuf.Timestamp start_at = 1;
+  google.protobuf.Timestamp end_at = 2;
+  Strategy strategy = 3;
 }
 
 message Strategy {
   oneof metadata {
-    StrategyDetailTopRegister strategy_top_register = 2;
-    StrategyDetailSpending strategy_spending = 3;
+    StrategyTopRegister strategy_top_register = 2;
+    StrategySpending strategy_spending = 3;
   }
 }
 
-message StrategyDetailTopRegister {
+message StrategyTopRegister {
     repeated Voucher vouchers = 1;
     int64 top_users = 2;
 }
 
-message StrategyDetailSpending {}
+message StrategySpending {}
 
 message Voucher {
   int64 id = 1;
