@@ -1,4 +1,4 @@
-package utils
+package httpresp
 
 const (
 	CodeSuccess    = 0

@@ -8,12 +8,10 @@ To get started with this project you must install docker and docker-compose. You
 docker-compose up -d
 ```
 # Documents
-## API
-You can find OpenAPI swagger in path `./api/docs/`.
-## Sequence Diagram
-Finding sequence diagram in path `./docs/sequence`
-## DB Design
-Finding DB design in path `./docs/db`
+## System Overview
+![Sequence Diagram](./docs/sequence/campaign_handling.png)
+## [OpenAPI Swagger](./api/docs)
+## [DB Design](./docs/db)
 
 # Structure and System Design
 ## Structure

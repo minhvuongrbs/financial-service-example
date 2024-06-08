@@ -5,7 +5,7 @@ import (
 
 	"github.com/minhvuongrbs/financial-service-example/api/grpc/auth"
 	"github.com/minhvuongrbs/financial-service-example/internal/auth/app"
-	"github.com/minhvuongrbs/financial-service-example/internal/common/utils"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/httpresp"
 	"github.com/minhvuongrbs/financial-service-example/pkg/logging"
 	"google.golang.org/grpc"
 )
@@ -44,8 +44,8 @@ func (s Service) RegisterUser(ctx context.Context,
 		return nil, err
 	}
 	return &auth.RegisterUserReply{
-		Code:    utils.CodeSuccess,
-		Message: utils.MessageSuccess,
+		Code:    httpresp.CodeSuccess,
+		Message: httpresp.MessageSuccess,
 	}, nil
 }
 
@@ -60,8 +60,8 @@ func (s Service) Login(ctx context.Context, req *auth.LoginRequest) (*auth.Login
 		return nil, err
 	}
 	return &auth.LoginReply{
-		Code:    utils.CodeSuccess,
-		Message: utils.MessageSuccess,
+		Code:    httpresp.CodeSuccess,
+		Message: httpresp.MessageSuccess,
 		Data: &auth.LoginReply_Data{
 			UserId: resp.UserId,
 			Token:  resp.Token,

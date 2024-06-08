@@ -6,7 +6,7 @@ import (
 
 	"github.com/minhvuongrbs/financial-service-example/api/grpc/promotion"
 	"github.com/minhvuongrbs/financial-service-example/config"
-	"github.com/minhvuongrbs/financial-service-example/internal/common/utils"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/httpresp"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/adapters/repository/campaign"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/adapters/repository/voucher"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/app/admin"
@@ -55,8 +55,8 @@ func (s AdminService) DefineCampaign(ctx context.Context, req *promotion.DefineC
 		return nil, fmt.Errorf("handle define campaign failed: %w", err)
 	}
 	return &promotion.DefineCampaignReply{
-		Code:    utils.CodeSuccess,
-		Message: utils.MessageSuccess,
+		Code:    httpresp.CodeSuccess,
+		Message: httpresp.MessageSuccess,
 	}, nil
 }
 
@@ -101,7 +101,7 @@ func (s AdminService) DefineVoucher(ctx context.Context, req *promotion.DefineVo
 		return nil, fmt.Errorf("define voucher failed: %w", err)
 	}
 	return &promotion.DefineVoucherReply{
-		Code:    utils.CodeSuccess,
-		Message: utils.MessageSuccess,
+		Code:    httpresp.CodeSuccess,
+		Message: httpresp.MessageSuccess,
 	}, nil
 }

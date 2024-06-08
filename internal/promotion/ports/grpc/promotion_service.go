@@ -6,7 +6,7 @@ import (
 
 	"github.com/minhvuongrbs/financial-service-example/api/grpc/promotion"
 	"github.com/minhvuongrbs/financial-service-example/config"
-	"github.com/minhvuongrbs/financial-service-example/internal/common/utils"
+	"github.com/minhvuongrbs/financial-service-example/internal/common/httpresp"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/adapters/repository/campaignuser"
 	"github.com/minhvuongrbs/financial-service-example/internal/promotion/app/service"
 	"google.golang.org/grpc"
@@ -45,7 +45,7 @@ func (s PromotionService) JoinCampaign(ctx context.Context, req *promotion.JoinC
 		return nil, fmt.Errorf("join campaign handler failed: %w", err)
 	}
 	return &promotion.JoinCampaignReply{
-		Code:    utils.CodeSuccess,
-		Message: utils.MessageSuccess,
+		Code:    httpresp.CodeSuccess,
+		Message: httpresp.MessageSuccess,
 	}, nil
 }
